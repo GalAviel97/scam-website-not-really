@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Futuristic Control Room Multi-View</title>
+    <link rel="stylesheet" href="multiview.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="main-header">
+    <h1>Control Room Multi-View</h1>
+    <div id="clock" class="clock"></div>
+</header>
+
+<div class="content">
+    <div class="video-container">
+        <!-- Video feeds with record buttons -->
+        <div class="video-wrapper">
+            <video id="video1" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 1</div>
+            <button class="record-btn" data-video-id="video1">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video2" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 2</div>
+            <button class="record-btn" data-video-id="video2">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video3" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 3</div>
+            <button class="record-btn" data-video-id="video3">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video4" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 4</div>
+            <button class="record-btn" data-video-id="video4">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video5" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 5</div>
+            <button class="record-btn" data-video-id="video5">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video6" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 6</div>
+            <button class="record-btn" data-video-id="video6">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video7" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 7</div>
+            <button class="record-btn" data-video-id="video7">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video8" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 8</div>
+            <button class="record-btn" data-video-id="video8">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video9" controls autoplay muted playsinline></video>
+            <div class="video-label">Western Wall 1</div>
+            <button class="record-btn" data-video-id="video9">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video10" controls autoplay muted playsinline></video>
+            <div class="video-label">Western Wall 2</div>
+            <button class="record-btn" data-video-id="video10">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video11" controls autoplay muted playsinline></video>
+            <div class="video-label">Western Wall 3</div>
+            <button class="record-btn" data-video-id="video11">Start Recording</button>
+        </div>
+        <div class="video-wrapper">
+            <video id="video12" controls autoplay muted playsinline></video>
+            <div class="video-label">Feed 12</div>
+            <button class="record-btn" data-video-id="video12">Start Recording</button>
+        </div>
+    </div>
+    
+    <div class="alerts-container">
+        <div class="alerts-section">
+            <h2>Live Alerts</h2>
+            <!-- Live Alert Content -->
+            <div class="alert-content" id="live-alert-content">
+                <div class="main-alert-container" id="live-alert-container">
+                    <div class="main-container-2">
+                        <header class="header" id="live-header">
+                            <div class="header-img-container">
+                                <img src="LOGO1-2.png" width="40px" height="40px">
+                            </div>
+                            <h1 class="header-title" id="live-header-title">צבע אדום בזמן אמת</h1>
+                        </header>
+                        <ul class="ul-container" id="live-ul-container">
+                            <!-- Live alert items will be dynamically added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h2>Historical Alerts</h2>
+            <!-- Historical Alert Content -->
+            <div class="alert-content" id="history-alert-content">
+                <div class="main-alert-container" id="history-alert-container">
+                    <div class="main-container-2">
+                        <header class="header" id="history-header">
+                            <div class="header-img-container">
+                                <img src="LOGO1-2.png" width="40px" height="40px">
+                            </div>
+                            <h1 class="header-title" id="history-header-title">היסטוריית התראות</h1>
+                        </header>
+                        <ul class="ul-container" id="history-ul-container">
+                            <!-- Historical alert items will be dynamically added here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div style="margin-top:20px; text-align:center;">
+    <a href="gallery.html" style="color:#0ff; font-size:1.5em; text-decoration:underline;">Go to Gallery</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+// Streams configuration
+const streams = [
+    "https://ynet-live-01.ynet-pic1.yit.co.il/ynet/live.m3u8",
+    "https://ynet-live-02.ynet-pic1.yit.co.il/ynet/live.m3u8",
+    "https://ynet-live-03.ynet-pic1.yit.co.il/ynet/live.m3u8",
+    "https://ynet-live-04.ynet-pic1.yit.co.il/ynet/live.m3u8",
+    "https://ynet-live-05.ynet-pic1.yit.co.il/ynet/live.m3u8",
+    "https://d2lckchr9cxrss.cloudfront.net/out/v1/c73af7694cce4767888c08a7534b503c/index_3.m3u8",
+    "https://reshet.g-mana.live/media/cdefce3a-14ec-46cc-a147-1275c4a8b9ed/profile/1/profileManifest.m3u8",
+    "https://kan11.media.kan.org.il/hls/live/2024514/2024514/source1_2.5k/chunklist.m3u8",
+    "https://cdn1.cast-tv.com/23595/Live_Kotel3_ABR/playlist.m3u8",
+    "https://cdn1.cast-tv.com/23595/Live_Kotel2_ABR/playlist.m3u8",
+    "https://cdn1.cast-tv.com/23595/Live_Kotel1_ABR/playlist.m3u8",
+    "https://bcovlive-a.akamaihd.net/d89ede8094c741b7924120b27764153c/eu-central-1/5377161796001/profile_0/chunklist.m3u8"
+];
+ 
+// Attach streams to video elements
+streams.forEach((url, index) => {
+    const video = document.getElementById(`video${index + 1}`);
+    if (video) {
+        video.autoplay = true;
+        video.muted = true;
+
+        if (url && Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+        } else if (url && video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = url;
+        }
+
+        video.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                video.style.objectFit = 'contain';
+            } else {
+                video.style.objectFit = 'contain';
+            }
+        });
+    }
+});
+
+// Clock
+function updateClock() {
+    const now = new Date();
+    const options = { timeZone: 'Asia/Jerusalem', hour12: false };
+    const timeString = now.toLocaleTimeString('en-GB', options);
+    document.getElementById('clock').textContent = timeString;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Fetching alerts (live and historical) from external JSON
+let previousLiveAlerts = [];
+let previousHistoryAlerts = [];
+
+function alertsAreEqual(a1, a2) {
+    if (a1.length !== a2.length) return false;
+    for (let i = 0; i < a1.length; i++) {
+        const alert1 = a1[i];
+        const alert2 = a2[i];
+        if (
+            alert1.time !== alert2.time ||
+            alert1.threat !== alert2.threat ||
+            alert1.isDrill !== alert2.isDrill ||
+            alert1.cities.length !== alert2.cities.length
+        ) {
+            return false;
+        }
+        for (let j = 0; j < alert1.cities.length; j++) {
+            if (alert1.cities[j] !== alert2.cities[j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+async function fetchLiveAlerts() {
+    try {
+        const response = await fetch('https://alert.galaviel.com/livealerts.json');
+        const alerts = await response.json();
+        if (!alertsAreEqual(alerts, previousLiveAlerts)) {
+            const ulContainer = document.getElementById('live-ul-container');
+            ulContainer.innerHTML = '';
+            alerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.className = 'area-container';
+                const div = document.createElement('div');
+                div.className = 'area-text';
+                const alertTime = new Date(alert.time * 1000);
+                const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jerusalem' };
+                const timeString = alertTime.toLocaleTimeString('en-GB', options);
+                const citiesString = alert.cities.join(', ');
+                const drillText = alert.isDrill ? ' (תרגול)' : '';
+                div.textContent = `${timeString} - ${citiesString}${drillText}`;
+                li.appendChild(div);
+                ulContainer.appendChild(li);
+            });
+            previousLiveAlerts = alerts;
+        }
+    } catch (error) {
+        console.error('Error fetching live alerts:', error);
+    }
+}
+
+async function fetchHistoryAlerts() {
+    try {
+        const response = await fetch('https://alert.galaviel.com/alerthistory.json');
+        const data = await response.json();
+        const alerts = data.alerts;
+        if (!alerts || !Array.isArray(alerts) || alerts.length === 0) {
+            console.log('No historical alerts found in data.');
+            return;
+        }
+        if (!alertsAreEqual(alerts, previousHistoryAlerts)) {
+            const ulContainer = document.getElementById('history-ul-container');
+            ulContainer.innerHTML = '';
+            alerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.className = 'area-container';
+                const div = document.createElement('div');
+                div.className = 'area-text';
+                let alertTime = new Date(alert.time * 1000);
+                const timeString = alertTime.toLocaleString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    timeZone: 'Asia/Jerusalem'
+                });
+                const citiesString = alert.cities && Array.isArray(alert.cities) ? alert.cities.join(', ') : 'Unknown Location';
+                const drillText = alert.isDrill ? ' (תרגול)' : '';
+                div.textContent = `${timeString} - ${citiesString}${drillText}`;
+                li.appendChild(div);
+                ulContainer.appendChild(li);
+            });
+            previousHistoryAlerts = alerts;
+        }
+    } catch (error) {
+        console.error('Error fetching historical alerts:', error);
+    }
+}
+
+setInterval(fetchLiveAlerts, 1000);
+fetchLiveAlerts();
+setInterval(fetchHistoryAlerts, 30000);
+fetchHistoryAlerts();
+
+// Recording Logic
+const recorders = {};
+document.querySelectorAll('.record-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+        const videoId = button.getAttribute('data-video-id');
+        const videoElement = document.getElementById(videoId);
+
+        if (!recorders[videoId]) {
+            recorders[videoId] = {
+                recorder: null,
+                chunks: [],
+                isRecording: false
+            };
+        }
+
+        const recorderObj = recorders[videoId];
+
+        if (!recorderObj.isRecording) {
+            // Start Recording
+            try {
+                if (videoElement.paused) await videoElement.play();
+                const stream = videoElement.captureStream();
+                const recorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+
+                recorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recorderObj.chunks.push(event.data);
+                    }
+                };
+                recorder.onstop = async () => {
+                    const blob = new Blob(recorderObj.chunks, { type: 'video/webm' });
+                    const base64Data = await blobToBase64(blob);
+                    const recordings = JSON.parse(localStorage.getItem('recordings') || '[]');
+                    recordings.push({
+                        id: Date.now(),
+                        name: `${videoId}_recorded_${new Date().toISOString()}.webm`,
+                        data: base64Data
+                    });
+                    localStorage.setItem('recordings', JSON.stringify(recordings));
+                    recorderObj.chunks = [];
+                    alert('Recording saved! Go to gallery to view.');
+                };
+
+                recorder.start();
+                recorderObj.recorder = recorder;
+                recorderObj.isRecording = true;
+                button.textContent = 'Stop Recording';
+            } catch (err) {
+                console.error('Error starting recording:', err);
+                alert('Unable to start recording.');
+            }
+        } else {
+            // Stop Recording
+            recorderObj.recorder.stop();
+            recorderObj.isRecording = false;
+            button.textContent = 'Start Recording';
+        }
+    });
+});
+
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            resolve(reader.result.split(',')[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+</script>
+
+</body>
+</html>
