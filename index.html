@@ -1,487 +1,376 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>!!! קורסי קיץ 2025 - הורדה קריטית !!!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-    <style>
-        /* --- CSS Styles --- */
-        :root {
-            --accent: #ff1f8f; --accent2: #ffca00; --danger: #ff1f1f; --warning: #ffa500;
-            --base-gradient-speed: 10s; --flicker-speed: 1.5s;
-        }
-         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
-        body {
-            font-family: 'Rubik', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: hidden;
-            background: linear-gradient(120deg, #1a001a, #330033, #4d004d); background-size: 300% 300%;
-            animation: gradientMove var(--base-gradient-speed) ease-in-out infinite;
-            padding: 15px; user-select: none; -webkit-user-select: none; position: relative;
-        }
-        body::before { /* Flicker effect */
-            content: ""; position: absolute; inset: 0; z-index: -1;
-            background: linear-gradient(45deg, rgba(255,0,0,0.1), rgba(0,255,0,0.1), rgba(0,0,255,0.1));
-            background-size: 400% 400%; animation: flicker var(--flicker-speed) linear infinite alternate;
-            opacity: 0; transition: opacity 1s ease-in-out;
-        }
-        body.stress-flicker::before { opacity: 0.6; }
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes flicker { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+  <meta charset="UTF-8" />
+  <title>Year In Health – Support & Info</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Year In Health – a beautiful, private yearly summary of your Apple Health data. See your steps, sleep, workouts, heart rate and more."
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-card: rgba(14, 20, 40, 0.95);
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, 0.2);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-soft: rgba(148, 163, 184, 0.35);
+      --radius-xl: 24px;
+      --shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.7);
+    }
 
-        /* Style to hide main content during download */
-        .main-content { transition: filter 0.5s ease-in-out, opacity 0.5s ease-in-out; }
-        .main-content.hidden { filter: blur(5px); opacity: 0.3; pointer-events: none; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        h1 { font-size: clamp(2.2rem, 7vw, 4rem); font-weight: 900; margin-bottom: 10px; text-shadow: 0 3px 10px rgba(255,255,0,0.5); animation: textShake 0.5s infinite alternate; animation-play-state: paused; }
-        h1.critical { animation-play-state: running; color: var(--warning); }
-        @keyframes textShake { from { transform: skewX(-1deg); } to { transform: skewX(1deg); } }
-        .chip { display: inline-block; margin: 3px; padding: 5px 12px; border-radius: 40px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); font-size: clamp(.7rem, 2vw, .9rem); font-weight: 500; }
-        p.description { max-width: 550px; font-size: clamp(1rem, 3vw, 1.1rem); line-height: 1.4; margin-bottom: 15px; }
-        #spotsLeftContainer { margin-bottom: 12px; font-weight: 700; font-size: 1.3rem; color: var(--warning); animation: pulseWarning 1s infinite; }
-        #spotsLeft { font-weight: 900; font-size: 1.5rem; display: inline-block; min-width: 40px; animation: numberFlicker 0.1s infinite; animation-play-state: paused; }
-        #spotsLeft.flickering { animation-play-state: running; color: var(--danger); }
-        @keyframes pulseWarning { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
-        @keyframes numberFlicker { 0% { opacity: 1; } 25% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.1); } 75% { opacity: 0.7; } 100% { opacity: 1; transform: scale(1); } }
-        #stressBarContainer { width: 90%; max-width: 450px; height: 12px; background: rgba(255, 255, 255, 0.15); border-radius: 6px; margin: 5px auto 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); }
-        #stressBar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent), var(--danger)); transition: width 0.5s linear, background-color 0.3s ease; }
-        #stressBar.pulsing { animation: pulseBar 0.5s infinite alternate; }
-        @keyframes pulseBar { from { filter: brightness(1); } to { filter: brightness(1.5); } }
-        #download-btn { display: inline-block; padding: 20px 55px; font-size: clamp(1.2rem, 5vw, 1.8rem); font-weight: 900; color: #000; border: none; border-radius: 50px; background-image: linear-gradient(135deg, var(--accent), var(--accent2)); cursor: pointer; text-decoration: none; transition: transform .15s, box-shadow .15s; box-shadow: 0 10px 30px rgba(255, 202, 0, .4); animation: intensePulse 1.5s infinite ease-in-out; }
-        #download-btn:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 14px 40px rgba(255, 31, 143, .5); }
-        #download-btn:active { transform: translateY(0px) scale(0.98); }
-        @keyframes intensePulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); filter: brightness(1.1); } 100% { transform: scale(1); } }
-        #countdown { margin-top: 12px; font-size: clamp(1.2rem, 5vw, 2rem); font-weight: 700; transition: color 0.3s ease, transform 0.2s, visibility 0.5s ease, opacity 0.5s ease; visibility: visible; opacity: 1; }
-        #countdown.hidden { visibility: hidden; opacity: 0; pointer-events: none; }
-        #countdown.danger { color: var(--danger); font-weight: 900; transform: scale(1.1); animation: shakeTimer 0.3s infinite linear; }
-        #timer { display: inline-block; min-width: 70px; }
-        #timer-suffix { font-size: 0.8em; opacity: 0.8; }
-        @keyframes shakeTimer { 0%, 100% { transform: translateX(0) scale(1.1); } 25% { transform: translateX(-3px) scale(1.1); } 75% { transform: translateX(3px) scale(1.1); } }
-        footer { margin-top: 25px; font-size: .7rem; opacity: .5; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1d4ed8 0, #020617 55%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
 
-        /* --- Overlays --- */
-        #popup, #msgOverlay, #welcomeOverlay, #expiredOverlay, #securityWarning {
-            position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(25, 0, 25, .95); backdrop-filter: blur(12px) saturate(1.8); color: #fff; text-align: center; padding: 20px;
-            visibility: hidden; opacity: 0; transition: visibility 0s .3s, opacity .3s ease-in-out; z-index: 999; user-select: none;
-        }
-        #popup.visible, #msgOverlay.visible, #welcomeOverlay.visible, #expiredOverlay.visible, #securityWarning.visible {
-            visibility: visible; opacity: 1; transition: visibility 0s 0s, opacity .3s ease-in-out;
-        }
-        #popup h2, #welcomeOverlay h2, #expiredOverlay h2, #securityWarning h2 { margin-bottom: 10px; font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 900; color: var(--accent2); }
-        #expiredOverlay h2 { color: var(--danger); animation: flickerRed 1s infinite; }
-        @keyframes flickerRed { 50% { text-shadow: 0 0 15px var(--danger); } }
-        #popup input { margin: 12px 0; padding: 12px 20px; border-radius: 30px; border: 2px solid var(--accent); width: 240px; text-align: center; font-family: 'Rubik', sans-serif; font-size: 1.1rem; background: rgba(255,255,255,0.1); color: #fff; }
-        #popup input:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 15px var(--accent2); }
-        #popup button, #welcomeOverlay button, #expiredOverlay button, #securityWarning button { margin-top: 15px; padding: 14px 36px; font-size: 1.1rem; border: none; border-radius: 40px; background: var(--accent); color: #000; font-weight: 700; cursor: pointer; transition: background-color 0.2s, transform 0.1s; }
-        #popup button:hover, #welcomeOverlay button:hover, #expiredOverlay button:hover, #securityWarning button:hover { background-color: var(--accent2); transform: scale(1.05); }
-        #popup button:active, #welcomeOverlay button:active, #expiredOverlay button:active, #securityWarning button:active { transform: scale(0.98); }
-        #captchaError { color: var(--danger); margin-top: 10px; display: none; font-weight: 700; font-size: 1.1rem; }
-        #securityWarning { border-top: 6px solid var(--warning); }
-        #securityWarning h2 { color: var(--warning); }
-        #securityWarning p { max-width: 480px; line-height: 1.7; font-size: 1.1rem; }
-        /* --- End Overlays --- */
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
 
-        /* --- Download Sequence Overlay Styles --- */
-        #msgOverlay p#msgText { font-size: 1.1rem; margin-top: 10px; font-weight: 500; color: #eee; }
-        #terminalOutput {
-            width: 90%; max-width: 600px; height: 200px; background: rgba(0,0,0,0.8); color: #0f0;
-            font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; text-align: left;
-            overflow-y: scroll; border: 1px solid #444; padding: 8px; white-space: pre-wrap;
-            margin-bottom: 15px; scroll-behavior: smooth;
-            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-        #terminalOutput span.error { color: #f00; } #terminalOutput span.warning { color: #ff0; }
-        #terminalOutput span.success { color: #0f0; } #terminalOutput span.info { color: #88f; }
-        #terminalOutput::-webkit-scrollbar { width: 8px; } #terminalOutput::-webkit-scrollbar-track { background: #222; }
-        #terminalOutput::-webkit-scrollbar-thumb { background: #0a0; } #terminalOutput::-webkit-scrollbar-thumb:hover { background: #0f0; }
-        #downloadProgressBarContainer { width: 80%; max-width: 450px; height: 25px; background: #333; border-radius: 12px; overflow: hidden; margin-bottom: 15px; border: 1px solid #555; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); }
-        #downloadProgressBar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent), var(--danger)); transition: width 0.2s linear; box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3); }
-        #downloadProgressBar.pulsing { animation: pulseBar 0.5s infinite alternate; }
-         /* --- End Download Sequence Styles --- */
+    a:hover {
+      text-decoration: underline;
+    }
 
-        /* --- Corner FOMO Popup --- */
-        #fomoPopup { /* Stays the same */ }
-        /* --- End Corner Popup --- */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
 
-        @keyframes shakePopup { /* Stays the same */ }
-    </style>
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .app-name {
+      font-size: 14px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+    }
+
+    h1 {
+      font-size: clamp(32px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .subtitle {
+      max-width: 560px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #a855f7);
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary {
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-main);
+      border-color: var(--border-soft);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left column – main content */
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-soft);
+      padding: 20px 20px 18px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(20px);
+    }
+
+    .card + .card {
+      margin-top: 18px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .pill {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-soft);
+      color: var(--text-muted);
+    }
+
+    ul.feature-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    ul.feature-list li::before {
+      content: "•";
+      color: var(--accent);
+      margin-right: 6px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .text-muted {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Right column – support & FAQ */
+
+    .side-card {
+      background: rgba(15, 23, 42, 0.88);
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    .faq-item + .faq-item {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .faq-q {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .faq-a {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
 </head>
-<body id="mainBody">
-    <div id="pageContent" class="main-content">
-        <div class="chip">⚠️ דחוף!</div>
-        <div class="chip">🔥 מבוקש!</div>
-        <div class="chip">⚡️ מהדורה מוגבלת!</div>
+<body>
+  <div class="page">
+    <header>
+      <div class="app-name">YEAR IN HEALTH</div>
+      <h1>See your entire year of health in one beautiful view.</h1>
+      <p class="subtitle">
+        Year In Health turns your Apple Health data into a clean, private and
+        fun yearly recap — including steps, sleep, workouts, heart rate and
+        more.
+      </p>
+      <div class="cta-row">
+        <!-- TODO: replace the href with your real App Store / TestFlight link -->
+        <a
+          class="btn-primary"
+          href="https://testflight.apple.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>Join the TestFlight beta</span>
+        </a>
+        <a class="btn-secondary" href="#support">Get support</a>
+      </div>
+    </header>
 
-        <h1 id="mainHeading">!!! הורד *מיד* את לוח קורסי הקיץ 2025 !!!</h1>
-        <p class="description">אזהרה: זו ההזדמנות האחרונה בהחלט שלך לקבל גישה בלעדית. אל תהיה זה שנשאר מאחור! הפעל עכשיו!</p>
+    <main class="layout">
+      <!-- LEFT – info about app -->
+      <section>
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">What the app does</h2>
+            <span class="pill">Overview</span>
+          </div>
+          <p class="text-muted" style="margin-bottom: 12px;">
+            Year In Health reads your Apple Health data (with your permission)
+            and builds a clear summary of your current year or any past year.
+          </p>
+          <ul class="feature-list">
+            <li>See total yearly steps, distance and daily trends.</li>
+            <li>Review your average sleep and longest sleep streaks.</li>
+            <li>Track active calories and your most intense days.</li>
+            <li>View key heart rate stats: average, minimum and maximum.</li>
+            <li>Explore interactive charts for steps, sleep and activity.</li>
+            <li>Create a shareable “Year Story” image ready for social media.</li>
+            <li>Enjoy a New Year countdown and an animated recap experience.</li>
+          </ul>
+        </article>
 
-        <div id="spotsLeftContainer">🔥🔥 נותרו רק <span id="spotsLeft">7</span> עותקים!!! 🔥🔥</div>
-        <div id="stressBarContainer"><div id="stressBar"></div></div>
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">Privacy & data</h2>
+            <span class="pill">On-device</span>
+          </div>
+          <p class="text-muted">
+            All data in Year In Health comes from Apple Health on your device.
+            The app:
+          </p>
+          <ul class="feature-list" style="margin-top: 8px;">
+            <li>Does not create an online account.</li>
+            <li>Does not send your health data to external servers.</li>
+            <li>Only reads the data types you explicitly allow in Apple Health.</li>
+            <li>You can revoke access at any time in the Health app.</li>
+          </ul>
+        </article>
 
-        <a id="download-btn" href="summer_courses_2025.ics" download>לחץ כאן!!! הורד!!! עכשיו!!!</a>
+        <article class="card" id="support">
+          <div class="card-header">
+            <h2 class="card-title">Need help?</h2>
+            <span class="pill">Support</span>
+          </div>
+          <p class="text-muted">
+            If you have questions, feedback or found a bug, you can contact the
+            developer:
+          </p>
+          <ul class="feature-list" style="margin-top: 8px;">
+            <li>Email: <a href="mailto:gal@galaviel.com">gal@galaviel.com</a></li>
+          </ul>
+          <p class="text-muted" style="margin-top: 10px;">
+            Please include your iPhone model and iOS version when reporting a
+            problem.
+          </p>
+        </article>
+      </section>
 
-        <div id="countdown">השער נסגר בעוד... <span id="timer">45</span> <span id="timer-suffix">*ביפ! ביפ!*</span></div>
-        <footer>© 2025 תאגיד הלחץ והבהלה (ש.פ.) בע"מ. כל הזכויות שמורות (לא באמת).</footer>
-    </div> <div id="welcomeOverlay">
-        <h2>⚡️ אימות גישה דחוף! ⚡️</h2>
-        <p>המערכת מזהה אותך! אשר את זהותך *מיד* כדי לא לאבד את מקומך בתור!</p>
-        <button onclick="closeWelcome()">אשר והמשך לאימות קריטי!</button>
-    </div>
-    <div id="popup">
-        <h2>🚨 אימות בטחוני רמה 5! 🚨</h2>
-        <p>חובה להוכיח אנושיות! הקלד '<strong>במבה</strong>' או שגישתך תינעל לצמיתות!</p>
-        <input id="captchaInput" type="text" placeholder="במבה!!! מהר!!!" />
-        <button onclick="verifyCaptcha()">אמת וחלץ אותי מפה!</button>
-        <p id="captchaError">⚠️ כישלון אימות קריטי! ⚠️<br>סכנת נעילת חשבון מיידית! נסה שוב בדחיפות!</p>
-    </div>
-    <div id="expiredOverlay">
-        <h2>❌ GAME OVER ❌</h2>
-        <p>נגמר. הפסדת. איחרת. 🐢<br>היית כל כך קרוב... ועכשיו הכל אבוד.<br>אין דרך חזרה.</p>
-        <button id="lastChanceBtn" onclick="giveAnotherChance()">אולי... בבקשה?! עוד ניסיון אחד קטן?! 🙏</button>
-    </div>
-    <div id="msgOverlay"> <div id="terminalOutput"></div>
-        <div id="downloadProgressBarContainer">
-            <div id="downloadProgressBar"></div>
+      <!-- RIGHT – FAQ / troubleshooting -->
+      <aside class="side-card">
+        <h2 class="section-title">FAQ</h2>
+
+        <div class="faq-item">
+          <div class="faq-q">Which data does Year In Health read?</div>
+          <div class="faq-a">
+            The app can read steps, active energy, sleep analysis, workouts and
+            heart rate from Apple Health, depending on what you approve in the
+            permission screen.
+          </div>
         </div>
-        <p id="msgText">מתחיל תהליך מאובטח...</p>
-    </div>
-    <div id="securityWarning">
-        <h2><span style="font-size: 2rem;">⚠️</span> עדכון אבטחה קריטי נדרש!</h2>
-        <p>זוהתה פרצת אבטחה חמורה בגרסה שברשותך. המשך בהורדה *מיידית* כדי להתקין את הטלאי המאובטח ולקבל את הלו"ז המעודכן והמוגן.</p>
-        <button onclick="closeSecurityWarning()">הורד והתקן עדכון אבטחה דחוף!</button>
-    </div>
-    <div id="fomoPopup"><p id="fomoText"></p></div>
-    <img src="https://mymap.quest/film.php?v=U1POMY">
 
-    <script>
-        // === Anti-Inspect (Optional) ===
-        // document.addEventListener('contextmenu', e => e.preventDefault());
-        // document.addEventListener('keydown', e => { if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) { e.preventDefault(); return false } });
+        <div class="faq-item">
+          <div class="faq-q">Why don't I see any data?</div>
+          <div class="faq-a">
+            Make sure you have Health data for the selected year, and confirm
+            that Year In Health has permission in
+            <strong>Settings → Health → Data Access &amp; Devices</strong>.
+          </div>
+        </div>
 
-        // --- Element Cache ---
-        const welcomeOverlay = document.getElementById('welcomeOverlay');
-        const popup = document.getElementById('popup');
-        const expiredOverlay = document.getElementById('expiredOverlay');
-        const msgOverlay = document.getElementById('msgOverlay');
-        const securityWarning = document.getElementById('securityWarning');
-        const downloadBtn = document.getElementById('download-btn');
-        const countdownDisplay = document.getElementById('countdown');
-        const timerDisplay = document.getElementById('timer');
-        const timerSuffix = document.getElementById('timer-suffix');
-        const captchaInput = document.getElementById('captchaInput');
-        const captchaError = document.getElementById('captchaError');
-        const spotsLeftDisplay = document.getElementById('spotsLeft');
-        const spotsContainer = document.getElementById('spotsLeftContainer');
-        const stressBar = document.getElementById('stressBar');
-        const bodyElement = document.getElementById('mainBody');
-        const mainHeading = document.getElementById('mainHeading');
-        const fomoPopup = document.getElementById('fomoPopup');
-        const fomoText = document.getElementById('fomoText');
-        const lastChanceBtn = document.getElementById('lastChanceBtn');
-        const pageContent = document.getElementById('pageContent');
-        const terminalOutput = document.getElementById('terminalOutput');
-        const downloadProgressBar = document.getElementById('downloadProgressBar');
-        const downloadMsgText = document.getElementById('msgText');
+        <div class="faq-item">
+          <div class="faq-q">
+            I denied Health access by mistake. How can I fix it?
+          </div>
+          <div class="faq-a">
+            Open the <strong>Health</strong> app, tap your profile → Apps →
+            <strong>Year In Health</strong> and enable the data types you want
+            the app to use.
+          </div>
+        </div>
 
-        // --- State Variables ---
-        let initialSeconds = 45;
-        let seconds = initialSeconds;
-        let countdownInterval = null;
-        let spots = 11;
-        let fomoInterval = null;
-        const fomoMessages = [
-            "ההזדמנות <strong>נסגרת</strong> בקרוב!", "<strong>אזהרה:</strong> משתמשים אחרים מקבלים גישה כרגע!",
-            "אל תחכה! המלאי <strong>כמעט אזל</strong>!", "מהירות היא קריטית! <strong>אל תהסס!</strong>",
-            "השרת בעומס! הבטח את מקומך <strong>עכשיו</strong>!", "האם אתה בטוח שאתה רוצה <strong>לוותר</strong> על זה?",
-            "⚠️ עדכון: רק <strong>בודדים</strong> נותרו!"
-        ];
-        let chanceCount = 0;
-        let downloadSequenceTimer = null;
-        let downloadVisualsInterval = null;
-        const downloadDuration = 30000; // 30 seconds
+        <div class="faq-item">
+          <div class="faq-q">Does the app sync anything to a server?</div>
+          <div class="faq-a">
+            No. All calculations and visualisations are done locally on your
+            iPhone. Your health data never leaves your device.
+          </div>
+        </div>
 
-        // --- Utility Functions ---
-        function showOverlay(overlayElement) { if (overlayElement) overlayElement.classList.add('visible'); }
-        function hideOverlay(overlayElement) { if (overlayElement) overlayElement.classList.remove('visible'); }
+        <div class="faq-item">
+          <div class="faq-q">
+            How do I join or leave the TestFlight beta?
+          </div>
+          <div class="faq-a">
+            Use the public TestFlight link above. You can leave the beta at any
+            time from the TestFlight app, and your local Health data will stay
+            on your device.
+          </div>
+        </div>
+      </aside>
+    </main>
 
-        // --- Welcome / Verification Flow ---
-        function showWelcome() { console.log("showWelcome"); showOverlay(welcomeOverlay); }
-        function closeWelcome() {
-            console.log("closeWelcome"); hideOverlay(welcomeOverlay);
-            setTimeout(() => {
-                if (localStorage.getItem('bambaVerified') !== 'yes') {
-                    console.log("-> showPopup"); showOverlay(popup);
-                } else {
-                    console.log("-> showSecurityWarning"); showOverlay(securityWarning);
-                }
-            }, 350);
-        }
-        function verifyCaptcha() {
-            console.log("verifyCaptcha");
-            if (captchaInput.value.trim() === 'במבה') {
-                console.log("Captcha OK"); localStorage.setItem('bambaVerified', 'yes');
-                hideOverlay(popup); captchaError.style.display = 'none'; captchaInput.style.border = '';
-                setTimeout(() => { showOverlay(securityWarning); }, 400);
-            } else {
-                console.log("Captcha Fail"); captchaError.style.display = 'block';
-                captchaInput.style.border = '3px solid var(--danger)'; captchaInput.focus();
-                if (popup) popup.style.animation = 'shakePopup 0.4s';
-                setTimeout(() => { if (popup) popup.style.animation = ''; }, 400);
-            }
-        }
-        function closeSecurityWarning() {
-            console.log("closeSecurityWarning"); hideOverlay(securityWarning);
-            setTimeout(() => {
-                if (!countdownInterval) { console.log("-> startCountdown"); startCountdown(); }
-                else { console.log("Countdown already running"); }
-            }, 350);
-        }
-
-        // --- FOMO Popup Logic ---
-        function showFomoPopup() {
-            if (!fomoPopup || fomoPopup.classList.contains('visible')) return;
-            console.log("showFomoPopup"); fomoText.innerHTML = fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
-            fomoPopup.classList.add('visible');
-            setTimeout(() => { if(fomoPopup) fomoPopup.classList.remove('visible'); }, 4000 + Math.random() * 2000);
-        }
-        function startFomoMessages() {
-            stopFomoMessages(); // Clear previous interval first
-            console.log("startFomoMessages"); setTimeout(showFomoPopup, 2000);
-            fomoInterval = setInterval(showFomoPopup, 8000 + Math.random() * 5000);
-        }
-        function stopFomoMessages() {
-            if (fomoInterval) { console.log("stopFomoMessages"); clearInterval(fomoInterval); fomoInterval = null; }
-            if(fomoPopup) fomoPopup.classList.remove('visible');
-        }
-
-        // --- Countdown Logic ---
-        function updateTimerDisplay() {
-            if (timerDisplay) timerDisplay.textContent = String(seconds).padStart(2, '0');
-
-            const percentage = ((initialSeconds - seconds) / initialSeconds) * 100;
-            if (stressBar) stressBar.style.width = `${percentage}%`;
-
-            // Dynamic visual updates (speed, flicker, critical state)
-            if (bodyElement) {
-                const speedRange = 8; const currentSpeed = 10 - (percentage / 100) * speedRange;
-                bodyElement.style.animationDuration = `${Math.max(1.5, currentSpeed)}s`;
-                const flickerSpeedRange = 1.2; const currentFlickerSpeed = 1.5 - (percentage / 100) * flickerSpeedRange;
-                bodyElement.style.setProperty('--flicker-speed', `${Math.max(0.2, currentFlickerSpeed)}s`);
-            }
-
-            if (spotsLeftDisplay && spotsContainer && seconds > 0) {
-                if (seconds % Math.max(1, Math.floor(seconds / 15 + 1)) === 0 && spots > 0) {
-                    let change = Math.ceil(Math.random() * 3) + (seconds < 10 ? 2 : 0); spots -= change;
-                    if (Math.random() < 0.15 && spots < 5 && spots > -2) spots += 1;
-                    spots = Math.max(0, spots); spotsLeftDisplay.textContent = spots;
-                    if (spots < 5) spotsLeftDisplay.classList.add('flickering');
-                    else spotsLeftDisplay.classList.remove('flickering');
-                     const extraSpan = spotsContainer.querySelector('span.extra-msg'); if (extraSpan) extraSpan.remove();
-                    if (spots === 0 && seconds > 1) {
-                        const zeroMsg = document.createElement('span'); zeroMsg.className = 'extra-msg';
-                        zeroMsg.innerHTML = "<br><span style='font-size:0.8em; color: var(--danger);'>אוי לא! אזל! חכה...</span>";
-                        spotsContainer.appendChild(zeroMsg);
-                    }
-                }
-            } else if (spotsLeftDisplay) { spotsLeftDisplay.textContent = spots; }
-
-            if (countdownDisplay && timerSuffix && mainHeading) {
-                if (seconds <= 10) {
-                    countdownDisplay.classList.add('danger'); timerSuffix.textContent = "*קריטי!*"; mainHeading.classList.add('critical'); if (bodyElement) bodyElement.classList.add('stress-flicker');
-                } else if (seconds <= 25) {
-                    countdownDisplay.classList.add('danger'); timerSuffix.textContent = "*מהר!*"; mainHeading.classList.remove('critical'); if (bodyElement) bodyElement.classList.remove('stress-flicker');
-                } else {
-                    countdownDisplay.classList.remove('danger'); timerSuffix.textContent = "*ביפ!*"; mainHeading.classList.remove('critical'); if (bodyElement) bodyElement.classList.remove('stress-flicker');
-                }
-            }
-
-            if (seconds === 15) console.warn("System Alert: High server load.");
-            if (seconds === 5) console.error("CRITICAL WARNING: Time expiration imminent.");
-
-            if (seconds <= 0) {
-                 console.log("Timer reached 0.");
-                 if (countdownInterval) { // Check if interval still exists (wasn't cleared by download start)
-                     clearInterval(countdownInterval); countdownInterval = null;
-                     offerExpired(); // Only trigger if download didn't start
-                 }
-             } else { seconds--; }
-        }
-
-        function startCountdown() {
-            console.log("startCountdown. Initial:", initialSeconds);
-            if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
-            seconds = initialSeconds; spots = Math.floor(Math.random() * 5) + 5;
-            if(spotsLeftDisplay) spotsLeftDisplay.textContent = spots;
-            if(spotsLeftDisplay) spotsLeftDisplay.classList.remove('flickering');
-            const extraSpan = spotsContainer?.querySelector('span.extra-msg'); if (extraSpan) extraSpan.remove();
-            if(countdownDisplay) countdownDisplay.classList.remove('danger', 'hidden'); // Ensure visible
-            if(mainHeading) mainHeading.classList.remove('critical');
-            if(bodyElement) bodyElement.classList.remove('stress-flicker');
-            if(stressBar) { stressBar.style.width = '0%'; stressBar.classList.remove('pulsing'); }
-            if (pageContent) pageContent.classList.remove('hidden'); // Ensure content visible
-
-            updateTimerDisplay(); // Show initial state
-            countdownInterval = setInterval(updateTimerDisplay, 1000);
-            startFomoMessages();
-        }
-
-        function offerExpired() {
-            console.log("offerExpired");
-            if(downloadBtn) downloadBtn.style.display = 'none';
-            if(spotsLeftDisplay) spotsLeftDisplay.textContent = "0";
-            stopFomoMessages(); showOverlay(expiredOverlay);
-            if (pageContent) pageContent.classList.add('hidden');
-        }
-
-        function giveAnotherChance() {
-            console.log("giveAnotherChance"); chanceCount++; hideOverlay(expiredOverlay);
-            if(downloadBtn) downloadBtn.style.display = 'inline-block';
-            initialSeconds = Math.max(10, initialSeconds - 15);
-            if (lastChanceBtn) {
-                if (chanceCount === 1) lastChanceBtn.textContent = "באמת?! עוד פעם אחת ודי! 🙏🙏";
-                else { lastChanceBtn.textContent = "טוב נו... אחרון אחרון חביב... 🥺"; initialSeconds = 10; }
-            }
-            startCountdown();
-        }
-        // --- End Countdown Logic ---
-
-
-        // --- Stressful Download Sequence ---
-        const terminalLines = [ // Pool of terminal messages (same as before)
-             "INFO: Initializing quantum download core...", "SECURE: Establishing handshake with server [AX-7]...",
-             "DEBUG: Packet fragment 7 received (size: 1024b)", "WARN: Minor latency detected (250ms). Compensating...",
-             "INFO: Allocating memory buffer (64MB)...", "SECURE: Encrypting data stream (AES-256)...",
-             "DEBUG: Verifying checksum for block #1A3F...", "ERROR: Non-critical I/O error on /dev/null. Retrying...",
-             "INFO: Decompressing layer 1/5...", "SECURE: Authenticating user token...",
-             "WARN: Server load high: 98%. Throttling slightly.", "DEBUG: Routing packet through node [EU-West-3]...",
-             "INFO: Calibrating flux capacitor...", "SECURE: Applying security patch KB20250502...",
-             "ERROR: Unexpected byte sequence at 0xDEADBEEF. Skipping...", "INFO: Decompressing layer 2/5...",
-             "WARN: High energy signature detected. Shielding active.", "DEBUG: Flushing buffer to disk cache...",
-             "SECURE: Performing integrity scan...", "INFO: Analyzing temporal displacement...",
-             "INFO: Decompressing layer 3/5...", "ERROR: Synaptic link unstable. Rerouting...",
-             "DEBUG: Acknowledging packet group delta...", "SECURE: Finalizing encryption keys...",
-             "WARN: Entropy pool running low. Generating more...", "INFO: Decompressing layer 4/5...",
-             "DEBUG: Preparing final assembly...", "SECURE: Purging temporary files...",
-             "INFO: Decompressing layer 5/5...", "WARN: Antimatter containment field fluctuating!",
-             "INFO: Almost there! Final verification...", "SUCCESS: Integrity check passed!",
-             "[CORE]: System Nominal", "[NET]: Connection Stable", "[SEC]: Encrypted Tunnel Active",
-             "[CPU]: Usage Peaking: 95%", "[MEM]: Buffer Optimal", "[IO]: Write Speed: 25MB/s"
-        ];
-
-        function addTerminalLine(text) {
-            if (!terminalOutput) return;
-            let lineHtml = text; // Default to plain text (which will be green)
-            if (text.startsWith("ERROR:")) lineHtml = `<span class="error">${text}</span>`;
-            else if (text.startsWith("WARN:")) lineHtml = `<span class="warning">${text}</span>`;
-            else if (text.startsWith("SUCCESS:")) lineHtml = `<span class="success">${text}</span>`;
-            else if (text.startsWith("SECURE:")) lineHtml = `<span class="success">${text}</span>`;
-            else if (text.startsWith("INFO:")) lineHtml = `<span class="info">${text}</span>`;
-            else if (text.startsWith("DEBUG:")) lineHtml = `<span>${text}</span>`; // Keep default color
-
-            terminalOutput.innerHTML += lineHtml + "\n";
-            terminalOutput.scrollTop = terminalOutput.scrollHeight; // Auto-scroll
-        }
-
-        function updateDownloadVisuals(startTime) {
-            const elapsed = Date.now() - startTime;
-            let progress = Math.min(100, (elapsed / downloadDuration) * 100);
-            let displayProgress = Math.max(0, Math.min(100, progress + (Math.random() - 0.5) * 2));
-
-            if (downloadProgressBar) {
-                downloadProgressBar.style.width = `${displayProgress}%`;
-                if (displayProgress > 90) downloadProgressBar.classList.add('pulsing');
-                else downloadProgressBar.classList.remove('pulsing');
-            }
-
-            const linesToAdd = Math.random() < 0.7 ? 1 : 2;
-            for (let i = 0; i < linesToAdd; i++) {
-                addTerminalLine(terminalLines[Math.floor(Math.random() * terminalLines.length)]);
-            }
-
-            let statusText = "מעבד נתונים...";
-            if (progress > 95) statusText = "מבצע אימות סופי...";
-            else if (progress > 75) statusText = "מבצע אופטימיזציה לקובץ...";
-            else if (progress > 50) statusText = "מרכיב חבילת נתונים...";
-            else if (progress > 25) statusText = "מפענח שכבות אבטחה...";
-            if (downloadMsgText) downloadMsgText.textContent = statusText + ` (${Math.floor(displayProgress)}%)`;
-        }
-
-        function startDownloadSequence() {
-            console.log("startDownloadSequence");
-
-            // Stop and hide main countdown
-            if (countdownInterval) { console.log("Clearing main countdown"); clearInterval(countdownInterval); countdownInterval = null; }
-            if (countdownDisplay) countdownDisplay.classList.add('hidden');
-            stopFomoMessages();
-            if (pageContent) pageContent.classList.add('hidden'); // Hide main content
-
-            // Prepare overlay
-            if (terminalOutput) terminalOutput.innerHTML = "";
-            if (downloadProgressBar) { downloadProgressBar.style.width = "0%"; downloadProgressBar.classList.remove('pulsing'); }
-            if (downloadMsgText) downloadMsgText.textContent = "מתחיל תהליך מאובטח... (0%)";
-            addTerminalLine(">>> Starting Secure Download Protocol v7.1 <<<");
-            showOverlay(msgOverlay);
-
-            const startTime = Date.now();
-
-            // Clear previous intervals/timers if any
-            if (downloadVisualsInterval) clearInterval(downloadVisualsInterval);
-            if (downloadSequenceTimer) clearTimeout(downloadSequenceTimer);
-
-            // Start visual updates
-            downloadVisualsInterval = setInterval(() => updateDownloadVisuals(startTime), 150);
-
-            // Set timer for completion
-            downloadSequenceTimer = setTimeout(() => {
-                console.log("Download sequence finished");
-                if (downloadVisualsInterval) { clearInterval(downloadVisualsInterval); downloadVisualsInterval = null; }
-
-                // Final visuals
-                if (downloadProgressBar) { downloadProgressBar.style.width = "100%"; downloadProgressBar.classList.add('pulsing'); }
-                if (downloadMsgText) downloadMsgText.textContent = "ההורדה הושלמה! (100%)";
-                addTerminalLine(">>> Download Complete. Hash verification successful. <<<");
-                addTerminalLine(">>> File saved to default location. <<<");
-                if(terminalOutput) terminalOutput.scrollTop = terminalOutput.scrollHeight;
-
-                // Trigger actual download after delay
-                setTimeout(() => {
-                    hideOverlay(msgOverlay);
-                    if (pageContent) pageContent.classList.remove('hidden'); // Show main content again
-                    if (downloadBtn) {
-                        try {
-                            const href = downloadBtn.getAttribute('href');
-                            if (href) { console.log("Triggering download:", href); window.location.href = href; }
-                            else { console.error("Download button href missing!"); }
-                        } catch (e) { console.error("Download trigger error:", e); }
-                    } else { console.error("Download button not found!"); }
-                }, 1200);
-
-            }, downloadDuration);
-        }
-        // --- End Download Sequence ---
-
-
-        // --- Event Listener Setup ---
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', e => {
-                console.log("Download button clicked"); e.preventDefault();
-                if (localStorage.getItem('bambaVerified') !== 'yes') {
-                    console.log("Verification needed -> showPopup");
-                    hideOverlay(securityWarning); hideOverlay(welcomeOverlay); showOverlay(popup);
-                } else {
-                    console.log("Verified -> startDownloadSequence");
-                    startDownloadSequence();
-                }
-            });
-        } else { console.error("Download button not found!"); }
-
-
-        // --- Initial Setup ---
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM loaded"); setTimeout(showWelcome, 300);
-            console.log("Initializing Super Secure Download System v6.6.9..."); // Incremented version
-        });
-
-    </script>
+    <footer>
+      <span>© 2025 Gal Aviel — Year In Health</span>
+      <span>Made for iPhone • Requires Apple Health</span>
+    </footer>
+  </div>
 </body>
 </html>
