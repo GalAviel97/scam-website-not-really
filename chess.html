@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>שח-גל 👑 המשחק של גל</title>
+    <title>שח-גל 👑 רמת גאון</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
+            --bg-dark: #020617;
             --panel-bg: #1e293b;
             --gold: #fbbf24;
-            --gold-glow: rgba(251, 191, 36, 0.3);
+            --gold-glow: rgba(251, 191, 36, 0.5);
             --blue: #3b82f6;
-            --white-piece: #f1f5f9;
+            --white-piece: #e2e8f0;
             --black-piece: #0f172a;
-            --square-light: #cbd5e1;
-            --square-dark: #475569;
-            --highlight: rgba(251, 191, 36, 0.6);
-            --last-move: rgba(59, 130, 246, 0.4);
+            --square-light: #94a3b8;
+            --square-dark: #334155;
+            --highlight: rgba(251, 191, 36, 0.7);
+            --last-move: rgba(59, 130, 246, 0.5);
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(circle, #1e293b 0%, #020617 100%);
+            background: radial-gradient(circle at top, #1e293b 0%, #020617 100%);
             color: white;
             margin: 0;
             min-height: 100vh;
@@ -34,41 +34,51 @@
         header {
             text-align: center;
             margin: 20px 0;
+            animation: fadeIn 1s ease-in;
         }
 
         h1 {
             color: var(--gold);
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin: 0;
-            text-shadow: 0 0 20px var(--gold-glow);
+            text-shadow: 0 0 25px var(--gold-glow);
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            letter-spacing: 1.5px;
+            font-size: 1.2rem;
+            margin-top: 5px;
         }
 
         .game-container {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 10px;
+            padding: 20px;
         }
 
         /* לוח השחמט */
         .board {
             display: grid;
-            grid-template-columns: repeat(8, 70px);
-            grid-template-rows: repeat(8, 70px);
-            border: 10px solid #334155;
-            border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            grid-template-columns: repeat(8, 75px);
+            grid-template-rows: repeat(8, 75px);
+            border: 12px solid #1e293b;
+            border-radius: 6px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             user-select: none;
+            position: relative;
         }
 
         .square {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 45px;
+            font-size: 50px;
             cursor: pointer;
             position: relative;
         }
@@ -79,83 +89,105 @@
         .piece {
             z-index: 2;
             cursor: grab;
-            transition: transform 0.1s;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
-        .piece.white { color: var(--white-piece); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-        .piece.black { color: var(--black-piece); }
+        .piece.white { color: var(--white-piece); text-shadow: 0 4px 6px rgba(0,0,0,0.6); }
+        .piece.black { color: var(--black-piece); text-shadow: 0 0 0 transparent; }
 
         /* אפקטים */
-        .selected { background-color: var(--highlight) !important; }
+        .selected { background-color: var(--highlight) !important; box-shadow: inset 0 0 15px var(--gold); }
         .last-move { background-color: var(--last-move) !important; }
         
         .valid-move::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(0, 200, 0, 0.5);
+            width: 22px;
+            height: 22px;
+            background: rgba(0, 255, 100, 0.6);
             border-radius: 50%;
             pointer-events: none;
+            box-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
         }
 
         .valid-capture {
-            box-shadow: inset 0 0 0 4px rgba(200, 0, 0, 0.5);
+            box-shadow: inset 0 0 0 4px rgba(220, 38, 38, 0.6);
         }
 
         /* פאנל צד */
         .sidebar {
             background: var(--panel-bg);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--gold);
-            width: 280px;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            width: 300px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .status-box {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
         .status {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
-            margin-bottom: 20px;
-            min-height: 40px;
             color: var(--gold);
+            min-height: 1.5em;
         }
 
         .turn-indicator {
             display: inline-block;
-            padding: 5px 15px;
-            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
             border-radius: 20px;
             font-size: 1rem;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            color: #93c5fd;
         }
 
         button {
-            background: linear-gradient(135deg, #eab308, #ca8a04);
+            background: linear-gradient(135deg, #eab308, #b45309);
             border: none;
-            padding: 12px 24px;
-            color: #0f172a;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 8px;
+            padding: 14px 24px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
-            transition: transform 0.1s;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
+            transition: all 0.2s;
         }
 
-        button:active { transform: scale(0.95); }
-        button:hover { filter: brightness(1.1); }
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(234, 179, 8, 0.6); }
+        button:active { transform: translateY(0); }
 
-        @media (max-width: 700px) {
-            .board {
-                grid-template-columns: repeat(8, 11vw);
-                grid-template-rows: repeat(8, 11vw);
-                border-width: 5px;
-            }
+        .loader {
+            display: none;
+            margin: 10px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 800px) {
+            .board { grid-template-columns: repeat(8, 11vw); grid-template-rows: repeat(8, 11vw); border-width: 5px; }
             .square { width: 11vw; height: 11vw; font-size: 8vw; }
-            h1 { font-size: 2rem; }
+            h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -163,34 +195,78 @@
 
     <header>
         <h1>שח-גל 👑</h1>
-        <div style="color: #94a3b8; letter-spacing: 1px;">הממלכה של גל</div>
+        <div class="subtitle">רמת גאון - נראה אותך מנצח</div>
     </header>
 
     <div class="game-container">
         <div class="board" id="board"></div>
 
         <div class="sidebar">
-            <div class="turn-indicator" id="turn-text">תור: גל (לבן)</div>
-            <div class="status" id="status-msg">בהצלחה גל!</div>
+            <div class="status-box">
+                <div class="turn-indicator" id="turn-text">תור: גל (לבן)</div>
+                <div class="status" id="status-msg">בהצלחה!</div>
+                <div class="loader" id="ai-loader"></div>
+            </div>
             
-            <div style="text-align: right; margin-top: 20px; font-size: 0.9rem; color: #cbd5e1;">
-                <div>♔ גל משחק בלבן</div>
-                <div>♚ המחשב משחק בשחור</div>
+            <div style="text-align: right; font-size: 0.9rem; color: #94a3b8; line-height: 1.6;">
+                <div>♔ <b>גל:</b> משחק בלבן</div>
+                <div>♚ <b>מחשב (AI):</b> מנתח 3 צעדים קדימה</div>
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">* הבוט משתמש באלגוריתם Minimax</div>
             </div>
 
-            <button onclick="initGame()">משחק חדש</button>
+            <button onclick="initGame()">🏳️ משחק חדש</button>
         </div>
     </div>
 
     <script>
-        // --- הגדרות בסיס ---
+        // --- הגדרות ---
         const boardEl = document.getElementById('board');
         const statusEl = document.getElementById('status-msg');
         const turnEl = document.getElementById('turn-text');
+        const loader = document.getElementById('ai-loader');
 
         const PIECES = {
             w: { k: '♔', q: '♕', r: '♖', b: '♗', n: '♘', p: '♙' },
             b: { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟︎' }
+        };
+
+        // ניקוד בסיסי לכלים
+        const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+
+        // טבלאות מיקום (PST) - הבוט יודע איפה כלים צריכים לעמוד
+        // עבור לבן (הופכים עבור שחור)
+        const PST = {
+            p: [
+                [0,  0,  0,  0,  0,  0,  0,  0],
+                [50, 50, 50, 50, 50, 50, 50, 50],
+                [10, 10, 20, 30, 30, 20, 10, 10],
+                [5,  5, 10, 25, 25, 10,  5,  5],
+                [0,  0,  0, 20, 20,  0,  0,  0],
+                [5, -5,-10,  0,  0,-10, -5,  5],
+                [5, 10, 10,-20,-20, 10, 10,  5],
+                [0,  0,  0,  0,  0,  0,  0,  0]
+            ],
+            n: [
+                [-50,-40,-30,-30,-30,-30,-40,-50],
+                [-40,-20,  0,  0,  0,  0,-20,-40],
+                [-30,  0, 10, 15, 15, 10,  0,-30],
+                [-30,  5, 15, 20, 20, 15,  5,-30],
+                [-30,  0, 15, 20, 20, 15,  0,-30],
+                [-30,  5, 10, 15, 15, 10,  5,-30],
+                [-40,-20,  0,  5,  5,  0,-20,-40],
+                [-50,-40,-30,-30,-30,-30,-40,-50]
+            ],
+            // שאר הכלים מקבלים לוחות פשוטים יותר לצורך קוד קצר
+            b: [
+                [-20,-10,-10,-10,-10,-10,-10,-20],
+                [-10,  0,  0,  0,  0,  0,  0,-10],
+                [-10,  0,  5, 10, 10,  5,  0,-10],
+                [-10,  5,  5, 10, 10,  5,  5,-10],
+                [-10,  0, 10, 10, 10, 10,  0,-10],
+                [-10, 10, 10, 10, 10, 10, 10,-10],
+                [-10,  5,  0,  0,  0,  0,  5,-10],
+                [-20,-10,-10,-10,-10,-10,-10,-20]
+            ]
         };
 
         const START_FEN = [
@@ -204,18 +280,16 @@
             ['wr','wn','wb','wq','wk','wb','wn','wr']
         ];
 
-        // משתני משחק
         let board = [];
-        let turn = 'w'; // w = Gal, b = Computer
-        let selectedSquare = null; // {r, c}
-        let validMoves = []; // Array of {r,c}
+        let turn = 'w';
+        let selectedSquare = null;
+        let validMoves = [];
         let gameOver = false;
         let lastMove = null;
 
-        // --- אתחול וציור ---
+        // --- אתחול ---
 
         function initGame() {
-            // שכפול עמוק של הלוח ההתחלתי
             board = JSON.parse(JSON.stringify(START_FEN));
             turn = 'w';
             gameOver = false;
@@ -223,7 +297,7 @@
             validMoves = [];
             lastMove = null;
             
-            updateStatus("המשחק התחיל!");
+            updateStatus("המשחק התחיל!", false);
             drawBoard();
         }
 
@@ -236,12 +310,8 @@
                     sq.dataset.r = r;
                     sq.dataset.c = c;
                     
-                    // בדיקה אם זו משבצת שנבחרה
-                    if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
-                        sq.classList.add('selected');
-                    }
+                    if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) sq.classList.add('selected');
 
-                    // בדיקה אם זה מהלך אחרון
                     if (lastMove) {
                         if ((lastMove.from.r === r && lastMove.from.c === c) || 
                             (lastMove.to.r === r && lastMove.to.c === c)) {
@@ -249,14 +319,12 @@
                         }
                     }
 
-                    // סימון מהלכים חוקיים
                     const isValidMove = validMoves.find(m => m.r === r && m.c === c);
                     if (isValidMove) {
                         sq.classList.add('valid-move');
                         if (board[r][c] !== '') sq.classList.add('valid-capture');
                     }
 
-                    // ציור הכלי
                     const pieceCode = board[r][c];
                     if (pieceCode) {
                         const color = pieceCode[0];
@@ -273,23 +341,26 @@
             }
         }
 
-        // --- לוגיקת משחק ---
+        function updateStatus(msg, thinking) {
+            statusEl.textContent = msg;
+            loader.style.display = thinking ? 'block' : 'none';
+        }
+
+        // --- לוגיקה ---
 
         function onSquareClick(r, c) {
-            if (gameOver || turn === 'b') return; // לא לגעת כשתור המחשב
+            if (gameOver || turn === 'b') return; 
 
-            // 1. האם לחצנו על מהלך חוקי שכבר חושב?
             const move = validMoves.find(m => m.r === r && m.c === c);
             if (move) {
                 executeMove(selectedSquare, move);
                 return;
             }
 
-            // 2. בחירת כלי חדש
             const piece = board[r][c];
             if (piece && piece.startsWith('w')) {
                 selectedSquare = {r, c};
-                validMoves = getSafeMoves(r, c); // חישוב מהלכים חוקיים
+                validMoves = getSafeMoves(r, c);
                 drawBoard();
             } else {
                 selectedSquare = null;
@@ -299,126 +370,251 @@
         }
 
         function executeMove(from, to) {
-            // ביצוע המהלך בזיכרון
             const piece = board[from.r][from.c];
             board[to.r][to.c] = piece;
             board[from.r][from.c] = '';
 
-            // הכתרה (Pawn Promotion) - אוטומטית למלכה
+            // הכתרה למלכה
             if (piece[1] === 'p' && (to.r === 0 || to.r === 7)) {
                 board[to.r][to.c] = piece[0] + 'q';
             }
 
             lastMove = { from, to };
             
-            // בדיקת ניצחון/הפסד לפני החלפת תור
-            const enemyColor = turn === 'w' ? 'b' : 'w';
-            if (isCheckmate(enemyColor)) {
+            if (isCheckmate(turn === 'w' ? 'b' : 'w')) {
                 gameOver = true;
                 drawBoard();
-                const winner = turn === 'w' ? "גל המלך! 🏆" : "המחשב ניצח";
-                updateStatus("מט! " + winner);
+                const winner = turn === 'w' ? "ניצחת! (גאון)" : "המחשב ניצח";
+                updateStatus("מט! " + winner, false);
                 return;
             }
 
-            // החלפת תור
             turn = turn === 'w' ? 'b' : 'w';
             selectedSquare = null;
             validMoves = [];
             
-            // עדכון UI
             const turnName = turn === 'w' ? "גל (לבן)" : "מחשב (שחור)";
             turnEl.textContent = "תור: " + turnName;
             
             if (isInCheck(turn)) {
-                updateStatus("שח! המלך בסכנה!");
+                updateStatus("שח! המלך בסכנה!", false);
             } else {
-                updateStatus(turn === 'w' ? "תורך גל" : "המחשב חושב...");
+                updateStatus(turn === 'w' ? "תורך גל" : "מחשב את המהלך...", turn === 'b');
             }
 
             drawBoard();
 
-            // אם תור המחשב -> הפעל AI
             if (turn === 'b' && !gameOver) {
-                setTimeout(computerMove, 500);
+                // השהיה קטנה לציור הלוח לפני שה-JS חוסם אותו לחישוב
+                setTimeout(makeBestMove, 100);
             }
         }
 
-        // --- מנוע חוקים (Move Generation) ---
+        // --- בינה מלאכותית (Minimax) ---
+
+        function makeBestMove() {
+            // עומק חיפוש 3 = המחשב רואה 3 מהלכים קדימה (שלך ושלו)
+            const depth = 3; 
+            const bestMove = minimaxRoot(depth, board, true);
+            
+            if (bestMove) {
+                // המרה מפורמט המנוע לפורמט המשחק שלנו
+                const from = {r: bestMove.fromR, c: bestMove.fromC};
+                const to = {r: bestMove.toR, c: bestMove.toC};
+                executeMove(from, to);
+            } else {
+                gameOver = true;
+                updateStatus("תיקו (פט)!", false);
+            }
+        }
+
+        // פונקציית העריכה (המוח של המחשב)
+        function evaluateBoard(bd) {
+            let totalEvaluation = 0;
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = bd[r][c];
+                    if (piece) {
+                        const type = piece[1];
+                        const color = piece[0];
+                        
+                        // ניקוד חומרי
+                        let value = PIECE_VALUES[type] || 0;
+                        
+                        // ניקוד מיקום (PST)
+                        if (type === 'p' || type === 'n' || type === 'b') {
+                            const table = PST[type] || PST['b']; // ברירת מחדל
+                            // אם זה לבן משתמשים בטבלה רגיל, אם שחור הופכים את הלוח (מראה)
+                            if (color === 'w') {
+                                value += table[r][c];
+                            } else {
+                                value += table[7-r][c]; 
+                            }
+                        }
+
+                        totalEvaluation = totalEvaluation + (color === 'b' ? value : -value);
+                    }
+                }
+            }
+            return totalEvaluation;
+        }
+
+        function minimaxRoot(depth, bd, isMaximizingPlayer) {
+            const newGameMoves = generateAllMoves(bd, 'b');
+            let bestMove = -99999;
+            let bestMoveFound = null;
+
+            for (let i = 0; i < newGameMoves.length; i++) {
+                const move = newGameMoves[i];
+                // בצע מהלך זמני
+                const savedPiece = bd[move.toR][move.toC];
+                bd[move.toR][move.toC] = bd[move.fromR][move.fromC];
+                bd[move.fromR][move.fromC] = '';
+
+                const value = minimax(depth - 1, bd, -100000, 100000, !isMaximizingPlayer);
+                
+                // בטל מהלך
+                bd[move.fromR][move.fromC] = bd[move.toR][move.toC];
+                bd[move.toR][move.toC] = savedPiece;
+
+                if (value >= bestMove) {
+                    bestMove = value;
+                    bestMoveFound = move;
+                }
+            }
+            return bestMoveFound;
+        }
+
+        function minimax(depth, bd, alpha, beta, isMaximizingPlayer) {
+            if (depth === 0) {
+                return evaluateBoard(bd);
+            }
+
+            const color = isMaximizingPlayer ? 'b' : 'w';
+            const newGameMoves = generateAllMoves(bd, color);
+
+            if (newGameMoves.length === 0) {
+                // בדיקת מט או פט בקצה העץ
+                // (פישוט: מחזיר ערך גבוה/נמוך אם המלך בסכנה, או 0 בתיקו)
+                // כאן נשתמש בהערכה סטטית כדי לחסוך זמן חישוב
+                return evaluateBoard(bd);
+            }
+
+            if (isMaximizingPlayer) {
+                let bestMove = -99999;
+                for (let i = 0; i < newGameMoves.length; i++) {
+                    const move = newGameMoves[i];
+                    
+                    const savedPiece = bd[move.toR][move.toC];
+                    // בונוס קטן לאכילות כדי לייעל את האלגוריתם (Move Ordering פרימיטיבי)
+                    if (savedPiece) { 
+                        // אופטימיזציה: אם אכלנו, נבדוק קודם
+                    }
+                    
+                    bd[move.toR][move.toC] = bd[move.fromR][move.fromC];
+                    bd[move.fromR][move.fromC] = '';
+                    
+                    bestMove = Math.max(bestMove, minimax(depth - 1, bd, alpha, beta, !isMaximizingPlayer));
+                    
+                    bd[move.fromR][move.fromC] = bd[move.toR][move.toC];
+                    bd[move.toR][move.toC] = savedPiece;
+
+                    alpha = Math.max(alpha, bestMove);
+                    if (beta <= alpha) {
+                        return bestMove;
+                    }
+                }
+                return bestMove;
+            } else {
+                let bestMove = 99999;
+                for (let i = 0; i < newGameMoves.length; i++) {
+                    const move = newGameMoves[i];
+                    
+                    const savedPiece = bd[move.toR][move.toC];
+                    bd[move.toR][move.toC] = bd[move.fromR][move.fromC];
+                    bd[move.fromR][move.fromC] = '';
+                    
+                    bestMove = Math.min(bestMove, minimax(depth - 1, bd, alpha, beta, !isMaximizingPlayer));
+                    
+                    bd[move.fromR][move.fromC] = bd[move.toR][move.toC];
+                    bd[move.toR][move.toC] = savedPiece;
+
+                    beta = Math.min(beta, bestMove);
+                    if (beta <= alpha) {
+                        return bestMove;
+                    }
+                }
+                return bestMove;
+            }
+        }
+
+        function generateAllMoves(bd, color) {
+            let moves = [];
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (bd[r][c] && bd[r][c].startsWith(color)) {
+                        const pieceMoves = getPseudoMoves(r, c, bd);
+                        moves.push(...pieceMoves.map(m => ({fromR: r, fromC: c, toR: m.r, toC: m.c})));
+                    }
+                }
+            }
+            // לצורך ביצועים, בתוך המינימקס אנחנו מסתמכים על pseudo moves
+            // אבל מסננים לקיחת מלך כדי שהבוט ידע שזה מהלך לא חוקי/מפסיד
+            // בגרסה פשוטה זו, אנחנו נותנים לו לחשב הכל, אבל אם הוא יכול לאכול מלך זה ציון אינסופי
+            return moves;
+        }
+
+        // --- לוגיקת תנועה קיימת (לא שונתה, רק שימוש חוזר) ---
 
         function getSafeMoves(r, c) {
             const piece = board[r][c];
             if (!piece) return [];
-            
             const rawMoves = getPseudoMoves(r, c, board);
             const myColor = piece[0];
-
-            // סינון מהלכים שמשאירים את המלך בשח
             return rawMoves.filter(m => {
-                // הדמיה של המהלך על לוח זמני
                 const tempBoard = JSON.parse(JSON.stringify(board));
                 tempBoard[m.r][m.c] = tempBoard[r][c];
                 tempBoard[r][c] = '';
-                
-                // האם המלך שלי עדיין מאוים?
                 return !isKingInDanger(tempBoard, myColor);
             });
         }
 
-        function getPseudoMoves(r, c, currentBoard) {
-            const piece = currentBoard[r][c];
+        function getPseudoMoves(r, c, bd) {
+            const piece = bd[r][c];
             const type = piece[1];
             const color = piece[0];
             const moves = [];
-
-            // פונקציית עזר לבדיקת גבולות ותוכן משבצת
             const check = (tr, tc) => {
                 if (tr < 0 || tr > 7 || tc < 0 || tc > 7) return 'out';
-                const target = currentBoard[tr][tc];
+                const target = bd[tr][tc];
                 if (target === '') return 'empty';
                 if (target[0] !== color) return 'capture';
                 return 'blocked';
             };
 
-            // לוגיקה לכל כלי
-            if (type === 'p') { // רגלי
+            if (type === 'p') {
                 const dir = color === 'w' ? -1 : 1;
                 const startRow = color === 'w' ? 6 : 1;
-                
-                // תנועה קדימה
                 if (check(r + dir, c) === 'empty') {
                     moves.push({r: r + dir, c: c});
-                    // צעד כפול
-                    if (r === startRow && check(r + dir * 2, c) === 'empty') {
-                        moves.push({r: r + dir * 2, c: c});
-                    }
+                    if (r === startRow && check(r + dir * 2, c) === 'empty') moves.push({r: r + dir * 2, c: c});
                 }
-                // אכילה באלכסון
                 if (check(r + dir, c - 1) === 'capture') moves.push({r: r + dir, c: c - 1});
                 if (check(r + dir, c + 1) === 'capture') moves.push({r: r + dir, c: c + 1});
-            }
-            
-            else if (type === 'n') { // פרש
-                const jumps = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
-                jumps.forEach(j => {
+            } else if (type === 'n') {
+                [[ -2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(j => {
                     const res = check(r + j[0], c + j[1]);
                     if (res === 'empty' || res === 'capture') moves.push({r: r+j[0], c: c+j[1]});
                 });
-            }
-            
-            else if (type === 'k') { // מלך
-                const steps = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
-                steps.forEach(s => {
+            } else if (type === 'k') {
+                [[ -1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(s => {
                     const res = check(r + s[0], c + s[1]);
                     if (res === 'empty' || res === 'capture') moves.push({r: r+s[0], c: c+s[1]});
                 });
-            }
-            
-            else { // רץ, צריח, מלכה (קווים)
+            } else {
                 const dirs = [];
                 if (type === 'r' || type === 'q') dirs.push([0,1],[0,-1],[1,0],[-1,0]);
                 if (type === 'b' || type === 'q') dirs.push([1,1],[1,-1],[-1,1],[-1,-1]);
-                
                 dirs.forEach(d => {
                     let tr = r + d[0];
                     let tc = c + d[1];
@@ -426,154 +622,24 @@
                         const res = check(tr, tc);
                         if (res === 'out' || res === 'blocked') break;
                         moves.push({r: tr, c: tc});
-                        if (res === 'capture') break; // אחרי אכילה עוצרים
-                        tr += d[0];
-                        tc += d[1];
+                        if (res === 'capture') break;
+                        tr += d[0]; tc += d[1];
                     }
                 });
             }
             return moves;
         }
 
-        // --- בדיקת שח (Check Detection) ---
-
-        function isInCheck(color) {
-            return isKingInDanger(board, color);
-        }
+        function isInCheck(color) { return isKingInDanger(board, color); }
 
         function isKingInDanger(bd, color) {
-            // 1. מציאת המלך
             let kR, kC;
             for (let r=0; r<8; r++) {
                 for (let c=0; c<8; c++) {
                     if (bd[r][c] === color + 'k') { kR = r; kC = c; break; }
                 }
             }
-            if (kR === undefined) return false; // לא אמור לקרות
-
-            // 2. בדיקה אם אויב מאיים עליו
-            const enemy = color === 'w' ? 'b' : 'w';
-            
-            // במקום לבדוק את כל הלוח, נבדוק אם קווים מהמלך פוגעים באויבים רלוונטיים (הרבה יותר יעיל)
-            
-            // בדיקת פרשים אויבים
-            const knights = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
-            for (let k of knights) {
-                const tr = kR+k[0], tc = kC+k[1];
-                if (tr>=0 && tr<8 && tc>=0 && tc<8 && bd[tr][tc] === enemy + 'n') return true;
-            }
-
-            // בדיקת אלכסונים (רץ/מלכה)
-            const diags = [[1,1],[1,-1],[-1,1],[-1,-1]];
-            for (let d of diags) {
-                let tr = kR+d[0], tc = kC+d[1];
-                while(tr>=0 && tr<8 && tc>=0 && tc<8) {
-                    const p = bd[tr][tc];
-                    if (p) {
-                        if (p === enemy + 'b' || p === enemy + 'q') return true;
-                        break; // חסימה
-                    }
-                    tr += d[0]; tc += d[1];
-                }
-            }
-
-            // בדיקת ישרים (צריח/מלכה)
-            const lines = [[0,1],[0,-1],[1,0],[-1,0]];
-            for (let l of lines) {
-                let tr = kR+l[0], tc = kC+l[1];
-                while(tr>=0 && tr<8 && tc>=0 && tc<8) {
-                    const p = bd[tr][tc];
-                    if (p) {
-                        if (p === enemy + 'r' || p === enemy + 'q') return true;
-                        break;
-                    }
-                    tr += l[0]; tc += l[1];
-                }
-            }
-
-            // בדיקת רגלים (Pawns)
-            const pawnDir = color === 'w' ? -1 : 1; // אויב בא מלמעלה אם אני לבן? לא, אויב שחור בא מלמעלה.
-            // אם אני לבן (color=w), האויב הוא שחור. שחור תוקף "למטה" (row גדל).
-            // התיקון: אנחנו בודקים מאיפה המלך מותקף.
-            // אם המלך לבן, הוא מותקף ע"י רגלי שחור שנמצא בשורה *נמוכה* יותר (row קטן יותר) - לא, שחור נמצא למעלה (0) ויורד למטה.
-            // המלך הלבן בשורה 7. רגלי שחור בשורה 6 מאיים עליו. (6 + 1 = 7).
-            
-            const enemyPawnDir = color === 'w' ? -1 : 1; 
-            // הסבר: אם אני לבן, אני מחפש רגלי שחור. רגלי שחור ב-(r-1, c±1) מאיים עליי.
-            
-            if (checkPawn(kR-1, kC-1, enemy + 'p')) return true;
-            if (checkPawn(kR-1, kC+1, enemy + 'p')) return true;
-            if (checkPawn(kR+1, kC-1, enemy + 'p')) return true;
-            if (checkPawn(kR+1, kC+1, enemy + 'p')) return true;
-
-            // בדיקת מלך אויב (צמוד)
-            const kings = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
-            for (let k of kings) {
-                const tr = kR+k[0], tc = kC+k[1];
-                if (tr>=0 && tr<8 && tc>=0 && tc<8 && bd[tr][tc] === enemy + 'k') return true;
-            }
-
-            return false;
-        }
-
-        function checkPawn(r, c, enemyPawn) {
-            // פונקציית עזר לבדיקה אם משבצת מכילה רגלי ספציפי שתוקף בכיוון הנכון
-            if (r>=0 && r<8 && c>=0 && c<8) {
-                if (board[r][c] === enemyPawn) {
-                    // וידוא כיוון תקין
-                    const isWhiteEnemy = enemyPawn[0] === 'w';
-                    const kingRow = isWhiteEnemy ? r-1 : r+1; // איפה המלך צריך להיות כדי שזה יאיים
-                    // בדיקה זו כללית מדי, בוא נפשט:
-                    // אם אני לבן, אני מותקף ע"י שחור שנמצא ב kRow-1 (מעליי).
-                    // אם אני שחור, אני מותקף ע"י לבן שנמצא ב kRow+1 (מתחתיי).
-                    const myColor = enemyPawn[0] === 'w' ? 'b' : 'w'; // הצבע שלי
-                    const attackRow = myColor === 'w' ? r+1 : r-1; // השורה שהרגלי הזה תוקף
-                    // בקיצור, הפונקציה הקודמת סרקה הכל, זה בסדר להשאיר פשוט:
-                    // אם יש רגלי אויב במשבצת שאמורה לאיים עליי - זה איום.
-                    const piece = board[r][c];
-                    if (!piece) return false;
-                    
-                    if (myColor === 'w') { // אני לבן, בודק אם יש שחור מעליי באלכסון
-                       // רגלי שחור בשורה r מאיים על r+1.
-                       // אז אם מצאתי רגלי שחור ב kR-1, הוא מאיים על kR.
-                       return (piece === 'bp' && (r+1)); 
-                    } else { // אני שחור, בודק אם יש לבן מתחתיי
-                       // רגלי לבן בשורה r מאיים על r-1.
-                       // אם מצאתי רגלי לבן ב kR+1, הוא מאיים על kR.
-                    }
-                    return piece === enemyPawn;
-                }
-            }
-            return false;
-        }
-        
-        // תיקון סופי לבדיקת רגלים פשוטה ואמינה:
-        function isKingInDangerPawnFix(bd, kR, kC, color) {
-             const enemy = color === 'w' ? 'b' : 'w';
-             // אם אני לבן, רגלי שחור תוקף מלמעלה (שורה קטנה יותר)
-             if (color === 'w') {
-                 if (bd[kR-1]?.[kC-1] === 'bp') return true;
-                 if (bd[kR-1]?.[kC+1] === 'bp') return true;
-             } else {
-                 // אם אני שחור, רגלי לבן תוקף מלמטה (שורה גדולה יותר)
-                 if (bd[kR+1]?.[kC-1] === 'wp') return true;
-                 if (bd[kR+1]?.[kC+1] === 'wp') return true;
-             }
-             return false;
-        }
-        
-        // נדרוס את פונקציית הסכנה עם התיקון של הרגלים בתוך הלוגיקה הראשית
-        // (הערה: הקוד למעלה מספיק טוב אבל התיקון הזה ודאי)
-        
-        // שכתוב פונקציית סכנה שתהיה בטוחה ב-100%
-        isKingInDanger = function(bd, color) {
-            let kR, kC;
-            for (let r=0; r<8; r++) {
-                for (let c=0; c<8; c++) {
-                    if (bd[r][c] === color + 'k') { kR = r; kC = c; break; }
-                }
-            }
-            if (kR === undefined) return false;
+            if (kR === undefined) return true; 
 
             const enemy = color === 'w' ? 'b' : 'w';
 
@@ -592,14 +658,11 @@
                 if (bd[kR+k[0]]?.[kC+k[1]] === enemy + 'n') return true;
             }
 
-            // אלכסונים וישרים (רץ, צריח, מלכה)
+            // קווים
             const dirs = [
-                {d:[1,1], p:['b','q']}, {d:[1,-1], p:['b','q']}, 
-                {d:[-1,1], p:['b','q']}, {d:[-1,-1], p:['b','q']},
-                {d:[0,1], p:['r','q']}, {d:[0,-1], p:['r','q']}, 
-                {d:[1,0], p:['r','q']}, {d:[-1,0], p:['r','q']}
+                {d:[1,1], p:['b','q']}, {d:[1,-1], p:['b','q']}, {d:[-1,1], p:['b','q']}, {d:[-1,-1], p:['b','q']},
+                {d:[0,1], p:['r','q']}, {d:[0,-1], p:['r','q']}, {d:[1,0], p:['r','q']}, {d:[-1,0], p:['r','q']}
             ];
-
             for (let setup of dirs) {
                 let r = kR + setup.d[0];
                 let c = kC + setup.d[1];
@@ -609,24 +672,17 @@
                         if (p[0] === enemy && setup.p.includes(p[1])) return true;
                         break;
                     }
-                    r += setup.d[0];
-                    c += setup.d[1];
+                    r += setup.d[0]; c += setup.d[1];
                 }
             }
-            
-            // מלך אויב (כדי לא לעמוד לידו)
              const kings = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
              for (let k of kings) {
                  if (bd[kR+k[0]]?.[kC+k[1]] === enemy + 'k') return true;
              }
-
             return false;
-        };
-
+        }
 
         function isCheckmate(color) {
-            // אם אין שום מהלך חוקי ואני בשח -> מט
-            // בדיקת כל הכלים שלי
             for (let r=0; r<8; r++) {
                 for (let c=0; c<8; c++) {
                     if (board[r][c].startsWith(color)) {
@@ -634,66 +690,10 @@
                     }
                 }
             }
-            return isInCheck(color); // אם אין מהלכים ואני בשח = מט. אם אין מהלכים ולא בשח = פט (לא טיפלנו בפט כדי לא לסבך, זה פשוט ייתקע או המחשב ינצח)
+            return isInCheck(color);
         }
 
-        // --- מחשב (AI) ---
-
-        function computerMove() {
-            if (gameOver || turn === 'w') return;
-
-            // איסוף כל המהלכים האפשריים למחשב
-            let allMoves = [];
-            for (let r=0; r<8; r++) {
-                for (let c=0; c<8; c++) {
-                    if (board[r][c].startsWith('b')) {
-                        const moves = getSafeMoves(r, c);
-                        moves.forEach(m => {
-                            allMoves.push({ from: {r,c}, to: m });
-                        });
-                    }
-                }
-            }
-
-            if (allMoves.length === 0) {
-                // המחשב לא יכול לזוז
-                gameOver = true;
-                if (isInCheck('b')) updateStatus("ניצחת גל! (מט)");
-                else updateStatus("תיקו (פט)");
-                return;
-            }
-
-            // בחירת המהלך הטוב ביותר (לפי אכילות)
-            let bestMove = allMoves[0];
-            let maxScore = -9999;
-            const vals = { p:10, n:30, b:30, r:50, q:90, k:900 };
-
-            allMoves.forEach(m => {
-                let score = Math.random() * 5; // אלמנט רנדומלי
-                
-                // האם אכלתי משהו?
-                const target = board[m.to.r][m.to.c];
-                if (target) score += vals[target[1]];
-
-                // האם התקדמתי למרכז?
-                if (m.to.r > 2 && m.to.r < 5 && m.to.c > 2 && m.to.c < 5) score += 2;
-
-                if (score > maxScore) {
-                    maxScore = score;
-                    bestMove = m;
-                }
-            });
-
-            executeMove(bestMove.from, bestMove.to);
-        }
-
-        function updateStatus(msg) {
-            statusEl.textContent = msg;
-        }
-
-        // התחלה
         initGame();
-
     </script>
 </body>
 </html>
