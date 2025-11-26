@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>4 בשורה של גל 👑</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --board-blue: #1e3a8a;
+            --gal-gold: #fbbf24;
+            --pc-dark: #334155;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at center, #1e293b, #020617);
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            direction: rtl;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: var(--gal-gold);
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .game-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .status {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            min-height: 40px;
+            color: white;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(7, 80px);
+            grid-template-rows: repeat(6, 80px);
+            gap: 10px;
+            background-color: var(--board-blue);
+            padding: 15px;
+            border-radius: 15px;
+            border: 4px solid #3b82f6;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        /* החריצים בלוח */
+        .cell {
+            width: 80px;
+            height: 80px;
+            background-color: var(--bg-dark); /* חור שקוף כביכול */
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.8);
+            overflow: hidden; /* כדי שהאנימציה לא תצא החוצה */
+        }
+        
+        /* עמודה (ללחיצה נוחה) */
+        .column-hover {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            background: rgba(255,255,255,0.0);
+            cursor: pointer;
+            z-index: 10;
+        }
+        .column-hover:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* הדיסקיות */
+        .disc {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: translateY(-500px); /* התחלה מלמעלה */
+            animation: drop 0.5s cubic-bezier(0.5, 0, 0.5, 1.5) forwards;
+        }
+
+        .disc.gold {
+            background: radial-gradient(circle at 30% 30%, #fcd34d, #b45309);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+        }
+
+        .disc.dark {
+            background: radial-gradient(circle at 30% 30%, #64748b, #0f172a);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+        }
+
+        @keyframes drop {
+            to { transform: translateY(0); }
+        }
+
+        button {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+            border: none;
+            padding: 12px 30px;
+            color: #0f172a;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+        }
+
+        .win-line {
+            border: 4px solid #fff;
+        }
+        
+        @media (max-width: 700px) {
+            .board { grid-template-columns: repeat(7, 12vw); grid-template-rows: repeat(6, 12vw); gap: 1vw; padding: 2vw;}
+            .cell { width: 12vw; height: 12vw; }
+            h1 { font-size: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>4 בשורה של גל 👑</h1>
+    <div class="subtitle">האם תצליח לנצח את המחשב?</div>
+
+    <div class="game-wrapper">
+        <div class="status" id="status">תורך, גל! (זהב)</div>
+        
+        <div class="board" id="board">
+            </div>
+
+        <button onclick="initGame()">משחק חדש</button>
+    </div>
+
+    <script>
+        // --- הגדרות ---
+        const ROWS = 6;
+        const COLS = 7;
+        const PLAYER = 1; // גל
+        const AI = 2;     // מחשב
+        const EMPTY = 0;
+
+        let board = [];
+        let gameActive = false;
+        let currentPlayer = PLAYER;
+
+        // --- אתחול ---
+        function initGame() {
+            board = Array(ROWS).fill().map(() => Array(COLS).fill(EMPTY));
+            gameActive = true;
+            currentPlayer = PLAYER;
+            document.getElementById('status').innerText = "תורך, גל! (זהב)";
+            document.getElementById('status').style.color = "white";
+            drawBoard();
+        }
+
+        function drawBoard() {
+            const boardEl = document.getElementById('board');
+            boardEl.innerHTML = ''; // ניקוי
+
+            // יצירת אזורי לחיצה (עמודות)
+            for (let c = 0; c < COLS; c++) {
+                const colHover = document.createElement('div');
+                colHover.className = 'column-hover';
+                colHover.style.left = (c * (window.innerWidth < 700 ? window.innerWidth * 0.13 : 90) + 15) + 'px'; 
+                // הערה: חישוב המיקום המדויק ב-CSS רספונסיבי מורכב, אז פה נשתמש בלוגיקה פשוטה יותר:
+                // במקום div לכל עמודה מעל, נשתמש ב-Click על ה-cell עצמו ונחשב עמודה.
+            }
+
+            // יצירת תאים
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.col = c; // נדע איזו עמודה זו
+                    cell.onclick = () => handleMove(c);
+
+                    // אם יש דיסקית
+                    if (board[r][c] !== EMPTY) {
+                        const disc = document.createElement('div');
+                        disc.className = `disc ${board[r][c] === PLAYER ? 'gold' : 'dark'}`;
+                        // ביטול אנימציה בציור מחדש (רק במהלך חדש יש אנימציה)
+                        disc.style.animation = 'none';
+                        disc.style.transform = 'translateY(0)';
+                        cell.appendChild(disc);
+                    }
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        // פונקציה להוספת דיסקית עם אנימציה
+        function addDiscToUI(r, c, player) {
+            const index = r * COLS + c;
+            const cells = document.querySelectorAll('.cell');
+            const cell = cells[index];
+            
+            const disc = document.createElement('div');
+            disc.className = `disc ${player === PLAYER ? 'gold' : 'dark'}`;
+            cell.appendChild(disc);
+        }
+
+        // --- לוגיקת משחק ---
+
+        function handleMove(col) {
+            if (!gameActive || currentPlayer !== PLAYER) return;
+
+            // מציאת השורה הפנויה הראשונה מלמטה
+            const row = getAvailableRow(col);
+            if (row === -1) return; // עמודה מלאה
+
+            makeMove(row, col, PLAYER);
+        }
+
+        function makeMove(row, col, player) {
+            board[row][col] = player;
+            addDiscToUI(row, col, player);
+
+            if (checkWin(player)) {
+                gameActive = false;
+                const msg = player === PLAYER ? "ניצחון לגל! 🏆" : "המחשב ניצח 🤖";
+                document.getElementById('status').innerText = msg;
+                document.getElementById('status').style.color = player === PLAYER ? "var(--gal-gold)" : "#ef4444";
+                return;
+            }
+
+            if (checkDraw()) {
+                gameActive = false;
+                document.getElementById('status').innerText = "תיקו! לוח מלא.";
+                return;
+            }
+
+            // החלפת תור
+            currentPlayer = player === PLAYER ? AI : PLAYER;
+            
+            if (currentPlayer === AI) {
+                document.getElementById('status').innerText = "המחשב חושב...";
+                setTimeout(aiMove, 600); // השהיה קטנה
+            } else {
+                document.getElementById('status').innerText = "תורך, גל!";
+            }
+        }
+
+        function getAvailableRow(col) {
+            for (let r = ROWS - 1; r >= 0; r--) {
+                if (board[r][col] === EMPTY) return r;
+            }
+            return -1;
+        }
+
+        // --- בדיקת ניצחון ---
+        function checkWin(player, checkBoard = board) {
+            // אופקי
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS - 3; c++) {
+                    if (checkBoard[r][c] === player && checkBoard[r][c+1] === player && 
+                        checkBoard[r][c+2] === player && checkBoard[r][c+3] === player) return true;
+                }
+            }
+            // אנכי
+            for (let r = 0; r < ROWS - 3; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (checkBoard[r][c] === player && checkBoard[r+1][c] === player && 
+                        checkBoard[r+2][c] === player && checkBoard[r+3][c] === player) return true;
+                }
+            }
+            // אלכסון /
+            for (let r = 3; r < ROWS; r++) {
+                for (let c = 0; c < COLS - 3; c++) {
+                    if (checkBoard[r][c] === player && checkBoard[r-1][c+1] === player && 
+                        checkBoard[r-2][c+2] === player && checkBoard[r-3][c+3] === player) return true;
+                }
+            }
+            // אלכסון \
+            for (let r = 0; r < ROWS - 3; r++) {
+                for (let c = 0; c < COLS - 3; c++) {
+                    if (checkBoard[r][c] === player && checkBoard[r+1][c+1] === player && 
+                        checkBoard[r+2][c+2] === player && checkBoard[r+3][c+3] === player) return true;
+                }
+            }
+            return false;
+        }
+
+        function checkDraw() {
+            return board[0].every(cell => cell !== EMPTY);
+        }
+
+        // --- AI (Minimax Algorithm) ---
+        // זה מה שעושה את המחשב חכם
+
+        function aiMove() {
+            // עומק חישוב (5 זה קשה מאוד בדפדפן)
+            const depth = 5; 
+            const [col, score] = minimax(board, depth, -Infinity, Infinity, true);
+            
+            if (col !== null) {
+                const row = getAvailableRow(col);
+                makeMove(row, col, AI);
+            }
+        }
+
+        // פונקציית הערכה של הלוח
+        function evaluateWindow(window, piece) {
+            let score = 0;
+            const oppPiece = piece === PLAYER ? AI : PLAYER;
+
+            let countPiece = window.filter(p => p === piece).length;
+            let countEmpty = window.filter(p => p === EMPTY).length;
+            let countOpp = window.filter(p => p === oppPiece).length;
+
+            if (countPiece === 4) return 100;
+            if (countPiece === 3 && countEmpty === 1) score += 5;
+            if (countPiece === 2 && countEmpty === 2) score += 2;
+            
+            if (countOpp === 3 && countEmpty === 1) score -= 4; // חסימה קריטית
+
+            return score;
+        }
+
+        function scorePosition(bd, piece) {
+            let score = 0;
+
+            // העדפה למרכז
+            const centerArray = [];
+            for (let r = 0; r < ROWS; r++) centerArray.push(bd[r][3]);
+            const centerCount = centerArray.filter(p => p === piece).length;
+            score += centerCount * 3;
+
+            // בדיקת כל החלונות האפשריים (אופקי, אנכי, אלכסונים)
+            // (קוד מקוצר לצורך יעילות)
+            
+            // אופקי
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS - 3; c++) {
+                    const window = [bd[r][c], bd[r][c+1], bd[r][c+2], bd[r][c+3]];
+                    score += evaluateWindow(window, piece);
+                }
+            }
+            // אנכי
+            for (let r = 0; r < ROWS - 3; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const window = [bd[r][c], bd[r+1][c], bd[r+2][c], bd[r+3][c]];
+                    score += evaluateWindow(window, piece);
+                }
+            }
+            // אלכסונים
+            for (let r = 0; r < ROWS - 3; r++) {
+                for (let c = 0; c < COLS - 3; c++) {
+                    const w1 = [bd[r][c], bd[r+1][c+1], bd[r+2][c+2], bd[r+3][c+3]];
+                    const w2 = [bd[r+3][c], bd[r+2][c+1], bd[r+1][c+2], bd[r][c+3]]; // אלכסון הפוך טופל בלולאה נפרדת
+                    score += evaluateWindow(w1, piece);
+                }
+            }
+            for (let r = 3; r < ROWS; r++) {
+                 for (let c = 0; c < COLS - 3; c++) {
+                    const w2 = [bd[r][c], bd[r-1][c+1], bd[r-2][c+2], bd[r-3][c+3]];
+                    score += evaluateWindow(w2, piece);
+                 }
+            }
+
+            return score;
+        }
+
+        // האלגוריתם הרקורסיבי
+        function minimax(bd, depth, alpha, beta, maximizingPlayer) {
+            const validLocations = [];
+            for (let c=0; c<COLS; c++) {
+                if (bd[0][c] === EMPTY) validLocations.push(c);
+            }
+
+            // תנאי עצירה: ניצחון או עומק 0
+            if (checkWin(AI, bd)) return [null, 1000000];
+            if (checkWin(PLAYER, bd)) return [null, -1000000];
+            if (validLocations.length === 0) return [null, 0];
+            if (depth === 0) return [null, scorePosition(bd, AI)];
+
+            if (maximizingPlayer) { // תור המחשב (מנסה למקסם ניקוד)
+                let value = -Infinity;
+                let column = validLocations[Math.floor(Math.random() * validLocations.length)];
+                
+                for (let col of validLocations) {
+                    const row = getAvailableRowInBoard(bd, col);
+                    const bCopy = bd.map(arr => arr.slice());
+                    bCopy[row][col] = AI;
+                    
+                    const newScore = minimax(bCopy, depth - 1, alpha, beta, false)[1];
+                    
+                    if (newScore > value) {
+                        value = newScore;
+                        column = col;
+                    }
+                    alpha = Math.max(alpha, value);
+                    if (alpha >= beta) break;
+                }
+                return [column, value];
+            } else { // תור השחקן (המחשב מדמה שאתה תשחק אופטימלי כדי להקטין לו ניקוד)
+                let value = Infinity;
+                let column = validLocations[Math.floor(Math.random() * validLocations.length)];
+                
+                for (let col of validLocations) {
+                    const row = getAvailableRowInBoard(bd, col);
+                    const bCopy = bd.map(arr => arr.slice());
+                    bCopy[row][col] = PLAYER;
+                    
+                    const newScore = minimax(bCopy, depth - 1, alpha, beta, true)[1];
+                    
+                    if (newScore < value) {
+                        value = newScore;
+                        column = col;
+                    }
+                    beta = Math.min(beta, value);
+                    if (alpha >= beta) break;
+                }
+                return [column, value];
+            }
+        }
+
+        function getAvailableRowInBoard(bd, col) {
+            for (let r = ROWS - 1; r >= 0; r--) {
+                if (bd[r][col] === EMPTY) return r;
+            }
+            return -1;
+        }
+
+        // התחלה
+        initGame();
+
+    </script>
+</body>
+</html>
