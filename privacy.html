@@ -5,127 +5,272 @@
   <title>Year In Health – Privacy Policy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      background: #0b1120;
-      color: #f8fafc;
-      margin: 0;
-      padding: 32px 20px 80px;
-      line-height: 1.65;
+    :root {
+      /* Colors matching the App's Festive Theme */
+      --bg-dark: #020024;
+      --bg-gradient: linear-gradient(135deg, #0a0a2e 0%, #1a0b2e 50%, #000000 100%);
+      
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-blur: 20px;
+      
+      --accent-gold: #FFD700;
+      
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      
+      --radius-xl: 28px;
     }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
+      background: var(--bg-dark);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.8; /* Increased line height for better readability */
+      padding: 40px 20px;
+    }
+
+    a {
+      color: var(--accent-gold);
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    a:hover { text-decoration: underline; }
 
     .container {
       max-width: 800px;
       margin: 0 auto;
     }
 
+    /* Glassmorphism Card for the content */
+    .policy-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 50px; /* Increased padding */
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
     h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
+      font-size: clamp(36px, 5vw, 48px); /* Slightly larger */
       font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(to bottom right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .last-updated {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 50px;
+      display: block;
+      font-style: italic;
     }
 
     h2 {
-      margin-top: 32px;
-      font-size: 22px;
+      margin-top: 50px;
+      margin-bottom: 20px;
+      font-size: 24px;
       font-weight: 700;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 12px;
+    }
+    
+    h3 {
+        margin-top: 30px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #e2e8f0;
     }
 
     p {
-      margin: 12px 0;
-      color: #cbd5e1;
+      margin-bottom: 20px; /* Increased spacing */
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 16px;
     }
 
-    a {
-      color: #3b82f6;
+    ul {
+      margin-bottom: 20px;
+      padding-left: 20px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    li { margin-bottom: 10px; }
+
+    /* Important Disclaimer Box */
+    .disclaimer-box {
+      background: rgba(255, 140, 0, 0.08); /* Slightly more subtle background */
+      border: 1px solid rgba(255, 140, 0, 0.4);
+      padding: 24px;
+      border-radius: 16px;
+      margin: 40px 0;
+    }
+
+    .disclaimer-title {
+      color: var(--accent-gold);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
+      display: block;
     }
 
     footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      font-size: 14px;
-      color: #64748b;
-      border-top: 1px solid #1e293b;
+      margin-top: 80px;
       text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-bottom: 30px;
+        font-size: 15px;
+        font-weight: 600;
+        opacity: 0.8;
+    }
+    
+    .back-link:hover {
+        opacity: 1;
+        text-decoration: none;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+        .policy-card {
+            padding: 30px 20px;
+        }
+        h1 {
+            font-size: 32px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 40px;
+        }
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <h1>Privacy Policy</h1>
-    <p>Last updated: November 2025</p>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    
+    <div class="policy-card">
+      <h1>Privacy Policy</h1>
+      <span class="last-updated">Last Updated: December 2025</span>
 
-    <p>
-      Year In Health (“the App”) is developed by Gal Aviel.  
-      This Privacy Policy explains how the App handles your data.
-    </p>
+      <p>
+        <strong>Year In Health</strong> (“the App,” “we,” “us,” or “our”) is developed by Gal Aviel. 
+        We are committed to protecting your privacy and ensuring you have complete control over your health data. 
+        This Privacy Policy outlines our practices regarding the collection, use, and disclosure of information when you use our application.
+      </p>
+      
+      <p>
+          By using Year In Health, you agree to the collection and use of information in accordance with this policy. 
+          Our fundamental principle is simple: <strong>Your data belongs to you.</strong>
+      </p>
 
-    <h2>1. No Data Leaves Your Device</h2>
-    <p>
-      Year In Health does <strong>not</strong> send any personal or health data to external servers.
-      All processing, calculations, charts and summaries happen <strong>locally on your iPhone</strong>.
-    </p>
+      <div class="disclaimer-box">
+        <span class="disclaimer-title">IMPORTANT: NOT MEDICAL ADVICE</span>
+        <p style="margin-bottom:0; font-size: 15px;">
+          This App is intended for <strong>informational, educational, and entertainment purposes only</strong>. 
+          It is not a medical device and is not intended to diagnose, treat, cure, or prevent any disease or health condition. 
+          The data presented, including but not limited to heart rate zones, activity trends, sleep analysis, and other health metrics, are estimates derived from Apple Health data and should not be considered clinically accurate measurements.
+          <br><br>
+          Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition or before starting any new fitness regime. 
+          Never disregard professional medical advice or delay in seeking it because of something you have read in this App. If you think you may have a medical emergency, call your doctor or emergency services immediately.
+        </p>
+      </div>
 
-    <h2>2. Health Data Access</h2>
-    <p>
-      The App reads Apple Health data only after you explicitly grant permission in the Health app.
-      Depending on your choice, the App may read:
-    </p>
+      <h2>1. Data Minimization & Local Processing</h2>
+      <p>
+        Year In Health operates with a strict <strong>"zero-knowledge"</strong> architecture regarding your personal health information. 
+        This means:
+      </p>
+      <ul>
+          <li><strong>No Backend Servers:</strong> We do not operate a backend server to store user health data. We have no database of user records.</li>
+          <li><strong>Local Processing:</strong> All data retrieval, aggregation, analysis, calculation, chart generation, and summary creation occur 100% locally on your iPhone using the device's own processor.</li>
+          <li><strong>No Data Transfer:</strong> Your health data is never transmitted, uploaded, synced, or shared with us or any third-party servers by the App. It remains strictly on your device (and in your personal iCloud backups, if enabled by you).</li>
+      </ul>
 
-    <ul>
-      <li>Steps</li>
-      <li>Distance</li>
-      <li>Sleep Analysis</li>
-      <li>Active Energy</li>
-      <li>Workouts</li>
-      <li>Heart Rate</li>
-    </ul>
+      <h2>2. Integration with Apple HealthKit</h2>
+      <p>
+        The App’s core functionality relies on reading data from Apple's HealthKit framework. 
+        We request read-only access to specific data types solely to visualize your year in health. 
+        We do not write data back to HealthKit.
+      </p>
+      <p>
+          We only access data types that you explicitly authorize via the iOS system permission prompt. 
+          Depending on the features you use, requested data types may include:
+      </p>
+      <ul>
+        <li><strong>Activity:</strong> Step count, walking/running distance, and active energy burned (calories).</li>
+        <li><strong>Sleep:</strong> Sleep analysis data to generate sleep duration and consistency insights.</li>
+        <li><strong>Heart:</strong> Resting heart rate, walking average heart rate, and heart rate variability (if applicable) for trend analysis.</li>
+        <li><strong>Workouts:</strong> Workout types, duration, and associated routes to summarize your fitness activities.</li>
+      </ul>
+      <p>
+        You retain full control over these permissions. You can review or revoke access at any time by navigating to: <br>
+        <strong>Settings app → Health → Data Access & Devices → Year In Health</strong>.
+      </p>
 
-    <p>
-      You can revoke access at any time under:  
-      <strong>Health App → Profile → Apps → Year In Health</strong>
-    </p>
+      <h2>3. Analytics & Tracking</h2>
+      <p>
+        We prioritize your privacy over data collection.
+      </p>
+      <ul>
+          <li><strong>No Third-Party Trackers:</strong> The App does not contain SDKs from advertising networks, social media platforms, or third-party analytics providers (such as Google Analytics, Mixpanel, or Facebook Pixel). We do not track your individual behavior, tap history, or precise location.</li>
+          <li><strong>Apple App Analytics:</strong> If you have opted-in to share "App Analytics" with developers within your iOS Privacy Settings, Apple provides us with anonymized, aggregated data. This may include installation counts, crash reports, and retention rates. This data is completely anonymous and cannot be used to identify you or access your health information.</li>
+      </ul>
 
-    <h2>3. No Tracking, No Ads</h2>
-    <p>
-      The App contains no analytics SDKs, advertising networks, trackers or cookies.
-      Nothing is collected or stored outside your device.
-    </p>
+      <h2>4. User Profile & Preferences</h2>
+      <p>
+        Any personal information you enter into the App, such as your name for the recap summary or your target year preference, is stored locally on your device using secure iOS storage mechanisms (NSUserDefaults/AppStorage). 
+        This information is used solely for customizing the user interface and generating personalized summaries. It is never transmitted to us.
+      </p>
 
-    <h2>4. User Profile & Account</h2>
-    <p>
-      The App does not require an account.  
-      Your name (if entered) is stored locally using App Storage and stays only on your device.
-    </p>
+      <h2>5. Limitation of Liability ("As Is")</h2>
+      <p>
+        The App is provided on an "AS IS" and "AS AVAILABLE" basis. The developer (Gal Aviel) makes no representations or warranties of any kind, express or implied, regarding the operation of the App or the information, content, or materials included therein.
+      </p>
+      <p>
+        To the full extent permissible by applicable law, the developer disclaims all warranties, express or implied, including, but not limited to, implied warranties of merchantability and fitness for a particular purpose. 
+        The developer shall not be liable for any damages of any kind arising from the use of the App, including, but not limited to, direct, indirect, incidental, punitive, and consequential damages, or damages for loss of data, injury, or profit.
+      </p>
+      <p>
+        We do not guarantee the accuracy, completeness, or timeliness of the health data displayed. The App relies entirely on the data recorded by your Apple Watch, iPhone sensors, or third-party apps and stored in the HealthKit database. Any inaccuracies in the source data will be reflected in the App.
+      </p>
 
-    <h2>5. Data Storage</h2>
-    <p>
-      The App does not store or export your Health data.  
-      It only reads live data from the Apple HealthKit database.
-    </p>
+      <h2>6. Changes to This Privacy Policy</h2>
+      <p>
+        We may update our Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. 
+        We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date at the top. 
+        You are advised to review this Privacy Policy periodically for any changes.
+      </p>
 
-    <h2>6. TestFlight and Crash Reports</h2>
-    <p>
-      If you join the TestFlight beta, Apple may send anonymized crash logs to the developer.
-      These logs contain <strong>no health data</strong> and cannot identify you.
-    </p>
-
-    <h2>7. Children’s Privacy</h2>
-    <p>
-      The App is not intended for children under 13.  
-      It does not collect or store personal information.
-    </p>
-
-    <h2>8. Contact</h2>
-    <p>
-      If you have any questions about this Privacy Policy, you can contact:
-      <br />
-      <a href="mailto:gal@galaviel.com">gal@galaviel.com</a>
-    </p>
+      <h2>7. Contact Us</h2>
+      <p>
+        If you have any questions, concerns, or feedback regarding this Privacy Policy or the App's data practices, please do not hesitate to contact us:
+        <br><br>
+        <strong>Email:</strong> <a href="mailto:gal@galaviel.com">gal@galaviel.com</a>
+      </p>
+    </div>
 
     <footer>
-      © 2025 Gal Aviel — Year In Health
+      <p>© 2025 Gal Aviel — Made with ❤️ for iPhone.</p>
     </footer>
   </div>
+
 </body>
 </html>
