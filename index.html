@@ -2,379 +2,430 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Year In Health – Support & Info</title>
+  <title>Year In Health – Your Year Wrapped</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta
-    name="description"
-    content="Year In Health – a beautiful, private yearly summary of your Apple Health data. See your steps, sleep, workouts, heart rate and more."
-  />
+  <meta name="description" content="Turn your Apple Health data into a cinematic, shareable story. The ultimate yearly recap app." />
+  
   <style>
     :root {
-      --bg: #050816;
-      --bg-card: rgba(14, 20, 40, 0.95);
-      --accent: #3b82f6;
-      --accent-soft: rgba(59, 130, 246, 0.2);
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --border-soft: rgba(148, 163, 184, 0.35);
-      --radius-xl: 24px;
-      --shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.7);
+      /* Colors matching the App's Festive Theme */
+      --bg-dark: #020024;
+      --bg-gradient: linear-gradient(135deg, #0a0a2e 0%, #1a0b2e 50%, #000000 100%);
+      
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-blur: 20px;
+      
+      --accent-gold: #FFD700;
+      --accent-orange: #FF8C00;
+      --btn-gradient: linear-gradient(135deg, #FFD700, #FF8C00);
+      
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      
+      --radius-xl: 28px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1d4ed8 0, #020617 55%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
+      background: var(--bg-dark);
       color: var(--text-main);
-      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
       line-height: 1.6;
     }
 
-    a {
-      color: var(--accent);
-      text-decoration: none;
+    /* Canvas for Background Animation */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: var(--bg-gradient);
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
+    a { text-decoration: none; transition: 0.3s; }
 
-    .page {
-      max-width: 960px;
+    .page-container {
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 32px 20px 64px;
+      padding: 80px 24px;
+      position: relative;
+      z-index: 1;
     }
 
+    /* --- HEADER & LOGO --- */
     header {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      margin-bottom: 40px;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 80px;
+      opacity: 0; 
+      animation: heroFadeIn 1.2s ease-out forwards;
     }
 
-    .app-name {
-      font-size: 14px;
-      letter-spacing: 0.25em;
+    .logo-container {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    /* The Logo Image */
+    .app-logo {
+      width: 160px;
+      height: 160px;
+      border-radius: 38px; /* iOS Superellipse style */
+      box-shadow: 0 20px 50px rgba(255, 140, 0, 0.25);
+      animation: floatLogo 6s ease-in-out infinite;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Status Badge */
+    .badge {
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      color: var(--accent-gold);
+      padding: 8px 16px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      color: var(--accent-soft);
+      margin-bottom: 16px;
+      display: inline-block;
+      backdrop-filter: blur(10px);
     }
 
     h1 {
-      font-size: clamp(32px, 4vw, 40px);
+      font-size: clamp(48px, 6vw, 72px);
       font-weight: 800;
-      letter-spacing: 0.04em;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to bottom right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .subtitle {
-      max-width: 560px;
+      font-size: 20px;
       color: var(--text-muted);
-      font-size: 15px;
+      max-width: 600px;
+      margin-bottom: 32px;
     }
 
+    /* --- BUTTONS --- */
     .cta-row {
       display: flex;
+      gap: 16px;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
+      justify-content: center;
     }
 
-    .btn-primary,
-    .btn-secondary {
+    .btn {
+      padding: 16px 32px;
+      border-radius: 99px;
+      font-size: 17px;
+      font-weight: 700;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #a855f7);
-      color: white;
-      box-shadow: var(--shadow-soft);
+      background: var(--btn-gradient);
+      color: #000;
+      box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
+      animation: pulseGlow 2s infinite;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6);
     }
 
     .btn-secondary {
-      background: rgba(15, 23, 42, 0.7);
-      color: var(--text-main);
-      border-color: var(--border-soft);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    .layout {
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* --- GRID LAYOUT --- */
+    .grid {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
-      gap: 24px;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 30px;
       align-items: start;
     }
 
-    @media (max-width: 840px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
     }
 
-    /* Left column – main content */
-
+    /* --- CARDS --- */
     .card {
-      background: var(--bg-card);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-xl);
-      border: 1px solid var(--border-soft);
-      padding: 20px 20px 18px;
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(20px);
+      padding: 32px;
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      
+      /* Scroll Reveal Setup */
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
     }
 
-    .card + .card {
-      margin-top: 18px;
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .card-header {
+    .card + .card { margin-top: 24px; }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: white;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .card-title {
-      font-size: 17px;
-      font-weight: 600;
-    }
-
-    .pill {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--border-soft);
-      color: var(--text-muted);
-    }
-
-    ul.feature-list {
+    /* Feature List */
+    ul.features {
       list-style: none;
       display: grid;
-      gap: 8px;
-      font-size: 14px;
-      color: var(--text-muted);
+      gap: 16px;
     }
 
-    ul.feature-list li::before {
-      content: "•";
-      color: var(--accent);
-      margin-right: 6px;
-    }
-
-    .section-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .text-muted {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    /* Right column – support & FAQ */
-
-    .side-card {
-      background: rgba(15, 23, 42, 0.88);
-      border-radius: var(--radius-xl);
-      padding: 18px 18px 16px;
-      border: 1px solid var(--border-soft);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(18px);
-    }
-
-    .faq-item + .faq-item {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(148, 163, 184, 0.4);
-    }
-
-    .faq-q {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .faq-a {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    footer {
-      margin-top: 40px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 12px;
-      color: var(--text-muted);
+    ul.features li {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
-      justify-content: space-between;
-      align-items: center;
+      color: rgba(255,255,255,0.9);
+      font-size: 16px;
+    }
+
+    ul.features li span.icon {
+      color: var(--accent-gold);
+      font-weight: bold;
+    }
+
+    /* FAQ Section */
+    .faq-item {
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .faq-item:last-child { border-bottom: none; margin-bottom: 0; }
+    
+    .question { font-weight: 700; color: #fff; margin-bottom: 6px; font-size: 16px; }
+    .answer { color: var(--text-muted); font-size: 15px; }
+
+    /* --- FOOTER --- */
+    footer {
+      margin-top: 100px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      opacity: 0.6;
+    }
+
+    footer a { color: var(--text-muted); text-decoration: underline; }
+
+    /* --- ANIMATIONS --- */
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 140, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0); }
     }
   </style>
 </head>
 <body>
-  <div class="page">
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="page-container">
+    
     <header>
-      <div class="app-name">YEAR IN HEALTH</div>
-      <h1>See your entire year of health in one beautiful view.</h1>
+      <div class="logo-container">
+        <img src="logo.png" alt="Year In Health Logo" class="app-logo">
+      </div>
+
+      <div class="badge">Open Beta • TestFlight</div>
+
+      <h1>Your Year In Health,<br>Wrapped.</h1>
+      
       <p class="subtitle">
-        Year In Health turns your Apple Health data into a clean, private and
-        fun yearly recap — including steps, sleep, workouts, heart rate and
-        more.
+        Discover the story behind your steps. Visualize your sleep, workouts, and heart rate in a stunning, cinematic yearly recap.
       </p>
+
       <div class="cta-row">
-        <!-- TODO: replace the href with your real App Store / TestFlight link -->
-        <a
-          class="btn-primary"
-          href="https://testflight.apple.com/join/tqM4WQ9t"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span>Join the TestFlight beta</span>
+        <a href="https://testflight.apple.com/join/tqM4WQ9t" class="btn btn-primary" target="_blank">
+          <span>Download Beta</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a class="btn-secondary" href="#support">Get support</a>
+        <a href="mailto:gal@galaviel.com" class="btn btn-secondary">Contact Dev</a>
       </div>
     </header>
 
-    <main class="layout">
-      <!-- LEFT – info about app -->
+    <div class="grid">
       <section>
-        <article class="card">
-          <div class="card-header">
-            <h2 class="card-title">What the app does</h2>
-            <span class="pill">Overview</span>
-          </div>
-          <p class="text-muted" style="margin-bottom: 12px;">
-            Year In Health reads your Apple Health data (with your permission)
-            and builds a clear summary of your current year or any past year.
+        <div class="card reveal">
+          <h2>✨ Experience Your Data</h2>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">
+            Stop staring at raw numbers. Year In Health turns your Apple Health metrics into an engaging story you'll actually want to watch.
           </p>
-          <ul class="feature-list">
-            <li>See total yearly steps, distance and daily trends.</li>
-            <li>Review your average sleep and longest sleep streaks.</li>
-            <li>Track active calories and your most intense days.</li>
-            <li>View key heart rate stats: average, minimum and maximum.</li>
-            <li>Explore interactive charts for steps, sleep and activity.</li>
-            <li>Create a shareable “Year Story” image ready for social media.</li>
-            <li>Enjoy a New Year countdown and an animated recap experience.</li>
+          <ul class="features">
+            <li>
+              <span class="icon">🎬</span>
+              <span><strong>Cinematic Recap:</strong> An Instagram-story style playback of your achievements.</span>
+            </li>
+            <li>
+              <span class="icon">❤️</span>
+              <span><strong>Smart Heart Stats:</strong> Analyze resting vs. active heart rate trends.</span>
+            </li>
+            <li>
+              <span class="icon">🏃‍♂️</span>
+              <span><strong>Activity Insights:</strong> See total distance, active calories, and workout trends.</span>
+            </li>
+            <li>
+              <span class="icon">🏆</span>
+              <span><strong>Gamified Badges:</strong> Unlock achievements for streaks and personal bests.</span>
+            </li>
           </ul>
-        </article>
+        </div>
 
-        <article class="card">
-          <div class="card-header">
-            <h2 class="card-title">Privacy & data</h2>
-            <span class="pill">On-device</span>
-          </div>
-          <p class="text-muted">
-            All data in Year In Health comes from Apple Health on your device.
-            The app:
+        <div class="card reveal">
+          <h2>🔒 Private by Design</h2>
+          <p style="color: var(--text-muted); margin-bottom: 12px;">
+            Your health data belongs to you. Period.
           </p>
-          <ul class="feature-list" style="margin-top: 8px;">
-            <li>Does not create an online account.</li>
-            <li>Does not send your health data to external servers.</li>
-            <li>Only reads the data types you explicitly allow in Apple Health.</li>
-            <li>You can revoke access at any time in the Health app.</li>
+          <ul class="features">
+            <li><span class="icon">✓</span><span>No account creation required.</span></li>
+            <li><span class="icon">✓</span><span>All processing happens on your iPhone.</span></li>
+            <li><span class="icon">✓</span><span>We never upload your health data to any server.</span></li>
           </ul>
-        </article>
-
-        <article class="card" id="support">
-          <div class="card-header">
-            <h2 class="card-title">Need help?</h2>
-            <span class="pill">Support</span>
-          </div>
-          <p class="text-muted">
-            If you have questions, feedback or found a bug, you can contact the
-            developer:
-          </p>
-          <ul class="feature-list" style="margin-top: 8px;">
-            <li>Email: <a href="mailto:gal@galaviel.com">gal@galaviel.com</a></li>
-          </ul>
-          <p class="text-muted" style="margin-top: 10px;">
-            Please include your iPhone model and iOS version when reporting a
-            problem.
-          </p>
-        </article>
+        </div>
       </section>
 
-      <!-- RIGHT – FAQ / troubleshooting -->
-      <aside class="side-card">
-        <h2 class="section-title">FAQ</h2>
+      <aside>
+        <div class="card reveal">
+          <h2>FAQ</h2>
+          
+          <div class="faq-item">
+            <div class="question">Is it free?</div>
+            <div class="answer">Yes! The core recap experience is completely free. We have a "Tip Jar" for those who want to support development.</div>
+          </div>
 
-        <div class="faq-item">
-          <div class="faq-q">Which data does Year In Health read?</div>
-          <div class="faq-a">
-            The app can read steps, active energy, sleep analysis, workouts and
-            heart rate from Apple Health, depending on what you approve in the
-            permission screen.
+          <div class="faq-item">
+            <div class="question">How do I share it?</div>
+            <div class="answer">At the end of your recap, you'll get a beautiful summary image generated automatically to save or share on social media.</div>
           </div>
-        </div>
 
-        <div class="faq-item">
-          <div class="faq-q">Why don't I see any data?</div>
-          <div class="faq-a">
-            Make sure you have Health data for the selected year, and confirm
-            that Year In Health has permission in
-            <strong>Settings → Health → Data Access &amp; Devices</strong>.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">
-            I denied Health access by mistake. How can I fix it?
-          </div>
-          <div class="faq-a">
-            Open the <strong>Health</strong> app, tap your profile → Apps →
-            <strong>Year In Health</strong> and enable the data types you want
-            the app to use.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">Does the app sync anything to a server?</div>
-          <div class="faq-a">
-            No. All calculations and visualisations are done locally on your
-            iPhone. Your health data never leaves your device.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">
-            How do I join or leave the TestFlight beta?
-          </div>
-          <div class="faq-a">
-            Use the public TestFlight link above. You can leave the beta at any
-            time from the TestFlight app, and your local Health data will stay
-            on your device.
+          <div class="faq-item">
+            <div class="question">Why don't I see data?</div>
+            <div class="answer">Make sure you have Apple Health data for the selected year and have granted permissions in the app.</div>
           </div>
         </div>
       </aside>
-    </main>
-<footer>
-  <span>© 2025 Gal Aviel — Year In Health</span>
-  <span><a href="privacy.html" style="color:#9ca3af;">Privacy Policy</a></span>
-</footer>
+    </div>
 
     <footer>
-      <span>© 2025 Gal Aviel — Year In Health</span>
-      <span>Made for iPhone • Requires Apple Health</span>
+      <p>© 2025 Gal Aviel — Made with ❤️ for iPhone.</p>
+      <p><a href="privacy.html">Privacy Policy</a></p>
     </footer>
+
   </div>
+
+  <script>
+    // --- 1. Background Particles Animation ---
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      createParticles();
+    }
+
+    function createParticles() {
+      particles = [];
+      const count = window.innerWidth < 600 ? 30 : 60; // Fewer particles on mobile
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 2 + 0.5,
+          speedY: Math.random() * 0.5 + 0.2,
+          opacity: Math.random() * 0.5 + 0.1
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      
+      particles.forEach(p => {
+        p.y -= p.speedY; // Move up like floating lights/bubbles
+        if (p.y < 0) p.y = height;
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+
+    // --- 2. Scroll Reveal Animation ---
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // Only animate once
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+
 </body>
 </html>
