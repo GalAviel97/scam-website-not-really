@@ -2,186 +2,459 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Year In Health – Your Year Wrapped</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Turn your Apple Health data into a cinematic, shareable story. The ultimate yearly recap app." />
-  
+
+  <title>Year In Health – Your Apple Health Year, Wrapped</title>
+  <meta
+    name="description"
+    content="Turn your Apple Health data into a beautiful yearly story with steps, sleep, workouts, heart rate, goals, achievements, and shareable recaps."
+  />
+  <meta name="theme-color" content="#080815" />
+  <meta name="apple-mobile-web-app-title" content="Year In Health" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Year In Health – Your Health Year, Wrapped" />
+  <meta
+    property="og:description"
+    content="A private, personalized yearly recap powered by your Apple Health data."
+  />
+  <meta property="og:image" content="logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Year In Health" />
+  <meta
+    name="twitter:description"
+    content="See your steps, sleep, workouts, heart rate, goals, achievements, and yearly trends in one beautiful app."
+  />
+  <meta name="twitter:image" content="logo.png" />
+
+  <link rel="icon" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Year In Health",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "iOS",
+    "description": "A private, personalized yearly recap powered by Apple Health data.",
+    "downloadUrl": "https://apps.apple.com/us/app/year-in-health/id6755406645",
+    "author": {
+      "@type": "Person",
+      "name": "Gal Aviel"
+    }
+  }
+  </script>
+
   <style>
     :root {
-      /* Colors matching the App's Festive Theme */
-      --bg-dark: #020024;
-      --bg-gradient: linear-gradient(135deg, #0a0a2e 0%, #1a0b2e 50%, #000000 100%);
-      
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-blur: 20px;
-      
-      --accent-gold: #FFD700;
-      --accent-orange: #FF8C00;
-      --btn-gradient: linear-gradient(135deg, #FFD700, #FF8C00);
-      
-      --text-main: #ffffff;
-      --text-muted: #94a3b8;
-      
-      --radius-xl: 28px;
+      --bg: #05050b;
+      --bg-soft: #0b0b18;
+      --card: rgba(255, 255, 255, 0.055);
+      --card-strong: rgba(255, 255, 255, 0.085);
+      --border: rgba(255, 255, 255, 0.11);
+      --text: #ffffff;
+      --muted: #a8afc1;
+      --gold: #ffd45a;
+      --orange: #ff962e;
+      --coral: #ff6f83;
+      --blue: #67b7ff;
+      --green: #6fe0a6;
+      --gradient: linear-gradient(135deg, #ffd45a 0%, #ff962e 52%, #ff6f83 100%);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+      --max-width: 1180px;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-main);
+      min-height: 100vh;
       overflow-x: hidden;
-      line-height: 1.6;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 10%, rgba(255, 150, 46, 0.16), transparent 32%),
+        radial-gradient(circle at 82% 22%, rgba(103, 183, 255, 0.14), transparent 34%),
+        linear-gradient(160deg, #090914 0%, #05050b 48%, #0a0711 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+        system-ui, sans-serif;
+      line-height: 1.55;
     }
 
-    /* Canvas for Background Animation */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     #bg-canvas {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      inset: 0;
       z-index: -1;
-      background: var(--bg-gradient);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.72;
     }
 
-    a { text-decoration: none; transition: 0.3s; }
-
-    .page-container {
-      max-width: 1000px;
+    .container {
+      width: min(calc(100% - 40px), var(--max-width));
       margin: 0 auto;
-      padding: 80px 24px;
-      position: relative;
-      z-index: 1;
     }
 
-    /* --- HEADER & LOGO --- */
-    header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 80px;
-      opacity: 0; 
-      animation: heroFadeIn 1.2s ease-out forwards;
-    }
-
-    .logo-container {
-      margin-bottom: 24px;
-      position: relative;
-    }
-
-    /* The Logo Image */
-    .app-logo {
-      width: 160px;
-      height: 160px;
-      border-radius: 38px; /* iOS Superellipse style */
-      box-shadow: 0 20px 50px rgba(255, 140, 0, 0.25);
-      animation: floatLogo 6s ease-in-out infinite;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    /* Status Badge */
-    .badge {
-      background: rgba(255, 215, 0, 0.1);
-      border: 1px solid rgba(255, 215, 0, 0.3);
-      color: var(--accent-gold);
-      padding: 8px 16px;
-      border-radius: 99px;
-      font-size: 13px;
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      transform: translateY(-150%);
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #fff;
+      color: #000;
       font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      display: inline-block;
-      backdrop-filter: blur(10px);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    /* Navigation */
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 16px 0;
+      background: linear-gradient(to bottom, rgba(5, 5, 11, 0.88), rgba(5, 5, 11, 0));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 58px;
+      padding: 8px 10px 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(15, 15, 27, 0.72);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      min-width: max-content;
+      font-size: 15px;
+      font-weight: 760;
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(255, 150, 46, 0.22);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #d9dbea;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 24px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 760;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      color: #120d05;
+      background: var(--gradient);
+      box-shadow: 0 14px 34px rgba(255, 150, 46, 0.24);
+    }
+
+    .button-primary:hover {
+      box-shadow: 0 18px 44px rgba(255, 150, 46, 0.35);
+    }
+
+    .button-secondary {
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.065);
+      color: #fff;
+    }
+
+    .button-small {
+      min-height: 42px;
+      padding: 0 18px;
+      font-size: 14px;
+    }
+
+    .apple-mark {
+      width: 18px;
+      height: 22px;
+      flex: 0 0 auto;
+    }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(340px, 0.96fr);
+      align-items: center;
+      gap: 66px;
+      padding: 88px 0 96px;
+    }
+
+    .hero-copy {
+      animation: fade-up 800ms ease both;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 24px;
+      padding: 9px 14px;
+      border: 1px solid rgba(111, 224, 166, 0.28);
+      border-radius: 999px;
+      color: #baf4d3;
+      background: rgba(111, 224, 166, 0.09);
+      font-size: 13px;
+      font-weight: 760;
+      letter-spacing: 0.02em;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(111, 224, 166, 0.09);
     }
 
     h1 {
-      font-size: clamp(48px, 6vw, 72px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      background: linear-gradient(to bottom right, #ffffff, #cbd5e1);
+      max-width: 760px;
+      font-size: clamp(52px, 7vw, 88px);
+      line-height: 0.99;
+      letter-spacing: -0.055em;
+    }
+
+    .gradient-text {
+      background: var(--gradient);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 16px;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      background-clip: text;
+      color: transparent;
     }
 
-    .subtitle {
-      font-size: 20px;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin-bottom: 32px;
+    .hero-subtitle {
+      max-width: 650px;
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: clamp(18px, 2.1vw, 22px);
     }
 
-    /* --- BUTTONS --- */
-    .cta-row {
+    .hero-actions {
       display: flex;
-      gap: 16px;
       flex-wrap: wrap;
-      justify-content: center;
+      gap: 14px;
+      margin-top: 34px;
     }
 
-    .btn {
-      padding: 16px 32px;
-      border-radius: 99px;
-      font-size: 17px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    .hero-note {
+      margin-top: 18px;
+      color: #8f97aa;
+      font-size: 13px;
     }
 
-    .btn-primary {
-      background: var(--btn-gradient);
-      color: #000;
-      box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
-      animation: pulseGlow 2s infinite;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.08);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.15);
-    }
-
-    /* --- GRID LAYOUT --- */
-    .grid {
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
       display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 30px;
-      align-items: start;
+      place-items: center;
+      min-height: 540px;
+      animation: fade-up 900ms 100ms ease both;
     }
 
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
+    .glow {
+      position: absolute;
+      width: 430px;
+      height: 430px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(255, 173, 51, 0.34), rgba(255, 111, 131, 0.1) 48%, transparent 72%);
+      filter: blur(14px);
     }
 
-    /* --- CARDS --- */
+    .showcase-card {
+      position: relative;
+      width: min(100%, 430px);
+      min-height: 520px;
+      overflow: hidden;
+      padding: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 42px;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255, 150, 46, 0.22), transparent 40%),
+        linear-gradient(165deg, rgba(21, 21, 35, 0.96), rgba(7, 7, 13, 0.98));
+      box-shadow: var(--shadow);
+      transform: rotate(2deg);
+    }
+
+    .showcase-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(140deg, rgba(255,255,255,0.16), transparent 30%);
+      pointer-events: none;
+    }
+
+    .showcase-label {
+      color: #f0f0f6;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .app-icon-large {
+      display: block;
+      width: 188px;
+      height: 188px;
+      margin: 44px auto 30px;
+      border-radius: 43px;
+      box-shadow:
+        0 28px 70px rgba(255, 150, 46, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.12);
+      animation: float 5.4s ease-in-out infinite;
+    }
+
+    .showcase-card h2 {
+      margin-bottom: 8px;
+      font-size: 38px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      text-align: center;
+    }
+
+    .showcase-card p {
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .mini-stat {
+      padding: 14px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .mini-stat span {
+      color: #969eb0;
+      font-size: 11px;
+    }
+
+    /* Sections */
+    section {
+      padding: 92px 0;
+    }
+
+    .section-heading {
+      max-width: 720px;
+      margin-bottom: 42px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .section-heading p {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-xl);
-      padding: 32px;
-      backdrop-filter: blur(var(--card-blur));
-      -webkit-backdrop-filter: blur(var(--card-blur));
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      
-      /* Scroll Reveal Setup */
       opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease-out;
+      transform: translateY(24px);
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      box-shadow: 0 20px 46px rgba(0, 0, 0, 0.16);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: opacity 650ms ease, transform 650ms ease, border-color 180ms ease,
+        background 180ms ease;
     }
 
     .card.visible {
@@ -189,243 +462,815 @@
       transform: translateY(0);
     }
 
-    .card + .card { margin-top: 24px; }
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: var(--card-strong);
+    }
 
-    h2 {
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.06);
       font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: white;
+    }
+
+    .card h3 {
+      margin-bottom: 9px;
+      font-size: 21px;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* Privacy */
+    .privacy-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 28px;
+      padding: 38px;
+      border: 1px solid rgba(103, 183, 255, 0.17);
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(103, 183, 255, 0.13), transparent 38%),
+        rgba(255, 255, 255, 0.045);
+      box-shadow: var(--shadow);
+    }
+
+    .privacy-copy h2 {
+      margin-bottom: 15px;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .privacy-copy p {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .privacy-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .privacy-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 17px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .privacy-item span:first-child {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .privacy-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .privacy-item p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Steps */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .step-number {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 22px;
+      border-radius: 50%;
+      color: #130d03;
+      background: var(--gradient);
+      font-weight: 900;
+    }
+
+    /* FAQ / Support */
+    .support-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .support-card {
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--card);
+    }
+
+    .support-card h3 {
+      margin-bottom: 12px;
+      font-size: 25px;
+    }
+
+    .support-card p {
+      color: var(--muted);
+    }
+
+    .support-card .button {
+      margin-top: 22px;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    summary {
+      position: relative;
+      cursor: pointer;
+      list-style: none;
+      padding: 20px 52px 20px 20px;
+      font-weight: 760;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "+";
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 24px;
+      font-weight: 400;
+    }
+
+    details[open] summary::after {
+      content: "–";
+    }
+
+    .faq-answer {
+      padding: 0 20px 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      padding: 48px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 174, 75, 0.22);
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 80% 30%, rgba(255, 111, 131, 0.14), transparent 35%),
+        radial-gradient(circle at 15% 80%, rgba(255, 212, 90, 0.13), transparent 42%),
+        rgba(255, 255, 255, 0.055);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .final-cta h2 {
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .final-cta p {
+      max-width: 600px;
+      margin: 18px auto 28px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    footer {
+      padding: 42px 0 54px;
+      color: #8d95a8;
+      font-size: 13px;
+    }
+
+    .footer-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 24px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* Feature List */
-    ul.features {
-      list-style: none;
-      display: grid;
-      gap: 16px;
-    }
-
-    ul.features li {
+    .footer-links {
       display: flex;
-      gap: 12px;
-      color: rgba(255,255,255,0.9);
-      font-size: 16px;
+      flex-wrap: wrap;
+      gap: 18px;
     }
 
-    ul.features li span.icon {
-      color: var(--accent-gold);
-      font-weight: bold;
+    .footer-links a:hover {
+      color: #fff;
     }
 
-    /* FAQ Section */
-    .faq-item {
-      padding-bottom: 16px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .faq-item:last-child { border-bottom: none; margin-bottom: 0; }
-    
-    .question { font-weight: 700; color: #fff; margin-bottom: 6px; font-size: 16px; }
-    .answer { color: var(--text-muted); font-size: 15px; }
-
-    /* --- FOOTER --- */
-    footer {
-      margin-top: 100px;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 14px;
-      opacity: 0.6;
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(26px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    footer a { color: var(--text-muted); text-decoration: underline; }
-
-    /* --- ANIMATIONS --- */
-    @keyframes heroFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
     }
 
-    @keyframes floatLogo {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
+    @media (max-width: 940px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 54px;
+        padding-top: 62px;
+        text-align: center;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .feature-grid,
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .privacy-panel,
+      .support-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.4); }
-      70% { box-shadow: 0 0 0 15px rgba(255, 140, 0, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0); }
+    @media (max-width: 640px) {
+      .container {
+        width: min(calc(100% - 28px), var(--max-width));
+      }
+
+      .nav-wrap {
+        padding-top: 10px;
+      }
+
+      nav {
+        min-height: 54px;
+        padding-left: 11px;
+      }
+
+      .brand span {
+        display: none;
+      }
+
+      .hero {
+        padding: 54px 0 72px;
+      }
+
+      h1 {
+        font-size: clamp(48px, 15vw, 68px);
+      }
+
+      .hero-actions {
+        width: 100%;
+      }
+
+      .hero-actions .button {
+        width: 100%;
+      }
+
+      .showcase-card {
+        min-height: 470px;
+        padding: 30px 22px;
+        border-radius: 32px;
+        transform: none;
+      }
+
+      .app-icon-large {
+        width: 158px;
+        height: 158px;
+        margin-top: 36px;
+      }
+
+      .showcase-card h2 {
+        font-size: 32px;
+      }
+
+      section {
+        padding: 70px 0;
+      }
+
+      .feature-grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-panel,
+      .final-cta {
+        padding: 28px 22px;
+      }
+
+      .footer-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      #bg-canvas {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <canvas id="bg-canvas"></canvas>
-
-  <div class="page-container">
-    
-    <header>
-      <div class="logo-container">
-        <img src="logo.png" alt="Year In Health Logo" class="app-logo">
-      </div>
-
-      <div class="badge">Open Beta • TestFlight</div>
-
-      <h1>Your Year In Health,<br>Wrapped.</h1>
-      
-      <p class="subtitle">
-        Discover the story behind your steps. Visualize your sleep, workouts, and heart rate in a stunning, cinematic yearly recap.
-      </p>
-
-      <div class="cta-row">
-        <a href="https://testflight.apple.com/join/tqM4WQ9t" class="btn btn-primary" target="_blank">
-          <span>Download Beta</span>
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  <div class="nav-wrap">
+    <div class="container">
+      <nav aria-label="Main navigation">
+        <a class="brand" href="#" aria-label="Year In Health home">
+          <img src="logo.png" alt="" />
+          <span>Year In Health</span>
         </a>
-        <a href="mailto:gal@galaviel.com" class="btn btn-secondary">Contact Dev</a>
-      </div>
-    </header>
 
-    <div class="grid">
-      <section>
-        <div class="card reveal">
-          <h2>✨ Experience Your Data</h2>
-          <p style="color: var(--text-muted); margin-bottom: 20px;">
-            Stop staring at raw numbers. Year In Health turns your Apple Health metrics into an engaging story you'll actually want to watch.
-          </p>
-          <ul class="features">
-            <li>
-              <span class="icon">🎬</span>
-              <span><strong>Cinematic Recap:</strong> An Instagram-story style playback of your achievements.</span>
-            </li>
-            <li>
-              <span class="icon">❤️</span>
-              <span><strong>Smart Heart Stats:</strong> Analyze resting vs. active heart rate trends.</span>
-            </li>
-            <li>
-              <span class="icon">🏃‍♂️</span>
-              <span><strong>Activity Insights:</strong> See total distance, active calories, and workout trends.</span>
-            </li>
-            <li>
-              <span class="icon">🏆</span>
-              <span><strong>Gamified Badges:</strong> Unlock achievements for streaks and personal bests.</span>
-            </li>
-          </ul>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#support">Support</a>
         </div>
 
-        <div class="card reveal">
-          <h2>🔒 Private by Design</h2>
-          <p style="color: var(--text-muted); margin-bottom: 12px;">
-            Your health data belongs to you. Period.
+        <a
+          class="button button-primary button-small"
+          href="https://apps.apple.com/us/app/year-in-health/id6755406645"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Get the app
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <div class="container">
+      <header class="hero">
+        <div class="hero-copy">
+          <div class="status-badge">
+            <span class="status-dot" aria-hidden="true"></span>
+            Now available on the App Store
+          </div>
+
+          <h1>
+            Your health year,
+            <span class="gradient-text">beautifully wrapped.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Turn your Apple Health data into a clear, personal, and meaningful story
+            featuring your steps, sleep, workouts, heart rate, goals, achievements,
+            and yearly trends.
           </p>
-          <ul class="features">
-            <li><span class="icon">✓</span><span>No account creation required.</span></li>
-            <li><span class="icon">✓</span><span>All processing happens on your iPhone.</span></li>
-            <li><span class="icon">✓</span><span>We never upload your health data to any server.</span></li>
-          </ul>
+
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="https://apps.apple.com/us/app/year-in-health/id6755406645"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Download Year In Health on the App Store"
+            >
+              <svg class="apple-mark" viewBox="0 0 24 28" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M20.6 14.7c0-3.8 3.1-5.6 3.2-5.7-1.8-2.6-4.6-2.9-5.6-3-2.4-.2-4.7 1.4-5.9 1.4-1.2 0-3.1-1.4-5.1-1.3-2.6 0-5.1 1.5-6.5 3.9-2.8 4.8-.7 11.9 2 15.8 1.3 1.9 2.9 4 5 3.9 2-.1 2.8-1.3 5.2-1.3 2.4 0 3.1 1.3 5.2 1.3 2.2 0 3.6-1.9 4.9-3.8 1.5-2.2 2.1-4.3 2.1-4.4-.1 0-4.5-1.7-4.5-6.8ZM16.6 3.5C17.7 2.2 18.5.4 18.3-1.4c-1.6.1-3.5 1.1-4.7 2.4-1 1.1-1.9 2.9-1.7 4.6 1.8.1 3.6-.9 4.7-2.1Z"
+                  transform="translate(0 1.5)"
+                />
+              </svg>
+              Download on the App Store
+            </a>
+
+            <a class="button button-secondary" href="#features">Explore features</a>
+          </div>
+
+          <p class="hero-note">
+            No account. No ads. No tracking. Your health data stays on your device.
+          </p>
+        </div>
+
+        <div class="hero-visual" aria-label="Year In Health app preview">
+          <div class="glow" aria-hidden="true"></div>
+
+          <div class="showcase-card">
+            <div class="showcase-label">Your year in one story</div>
+            <img
+              src="logo.png"
+              alt="Year In Health app icon"
+              class="app-icon-large"
+            />
+            <h2>See the bigger picture.</h2>
+            <p>Small habits, meaningful progress, one beautifully organized year.</p>
+
+            <div class="mini-stats" aria-label="Available health categories">
+              <div class="mini-stat">
+                <strong>Steps</strong>
+                <span>Yearly progress</span>
+              </div>
+              <div class="mini-stat">
+                <strong>Sleep</strong>
+                <span>Patterns & trends</span>
+              </div>
+              <div class="mini-stat">
+                <strong>Workouts</strong>
+                <span>Activity insights</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section id="features" aria-labelledby="features-title">
+        <div class="section-heading">
+          <span class="eyebrow">Your data, made meaningful</span>
+          <h2 id="features-title">Everything you need to understand your year.</h2>
+          <p>
+            Year In Health turns scattered Apple Health numbers into useful insights,
+            progress tracking, achievements, and a recap you can actually enjoy.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="card reveal">
+            <div class="feature-icon" aria-hidden="true">📊</div>
+            <h3>Yearly Health Summary</h3>
+            <p>
+              View your most important health and activity metrics together in one
+              clear yearly overview.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="feature-icon" aria-hidden="true">🎯</div>
+            <h3>Goals & Progress</h3>
+            <p>
+              Set goals for steps, workouts, active calories, and sleep, then see
+              whether you are ahead, on track, or behind.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="feature-icon" aria-hidden="true">📈</div>
+            <h3>Monthly Trends</h3>
+            <p>
+              Explore interactive charts that reveal changes, patterns, and progress
+              throughout the year.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="feature-icon" aria-hidden="true">🏆</div>
+            <h3>Achievements & Streaks</h3>
+            <p>
+              Unlock smart achievements generated from your real activity and celebrate
+              the habits you kept going.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="feature-icon" aria-hidden="true">😴</div>
+            <h3>Sleep Insights</h3>
+            <p>
+              Review sleep duration, averages, consistency, and how your sleep changed
+              across different months.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="feature-icon" aria-hidden="true">🎉</div>
+            <h3>Year Story</h3>
+            <p>
+              Relive your year through a special recap and generate a beautiful image
+              you can save or share.
+            </p>
+          </article>
         </div>
       </section>
 
-      <aside>
-        <div class="card reveal">
-          <h2>FAQ</h2>
-          
-          <div class="faq-item">
-            <div class="question">Is it free?</div>
-            <div class="answer">Yes! The core recap experience is completely free. We have a "Tip Jar" for those who want to support development.</div>
+      <section id="privacy" aria-labelledby="privacy-title">
+        <div class="privacy-panel reveal">
+          <div class="privacy-copy">
+            <span class="eyebrow">Privacy first</span>
+            <h2 id="privacy-title">Your health data belongs to you.</h2>
+            <p>
+              Year In Health was designed so your personal information never needs to
+              leave your iPhone.
+            </p>
           </div>
 
-          <div class="faq-item">
-            <div class="question">How do I share it?</div>
-            <div class="answer">At the end of your recap, you'll get a beautiful summary image generated automatically to save or share on social media.</div>
-          </div>
+          <div class="privacy-list">
+            <div class="privacy-item">
+              <span aria-hidden="true">✓</span>
+              <div>
+                <strong>100% on-device processing</strong>
+                <p>Your insights, charts, achievements, and recap images are created locally.</p>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="question">Why don't I see data?</div>
-            <div class="answer">Make sure you have Apple Health data for the selected year and have granted permissions in the app.</div>
+            <div class="privacy-item">
+              <span aria-hidden="true">✓</span>
+              <div>
+                <strong>No account or sign-up</strong>
+                <p>Open the app, grant the permissions you choose, and start exploring.</p>
+              </div>
+            </div>
+
+            <div class="privacy-item">
+              <span aria-hidden="true">✓</span>
+              <div>
+                <strong>No servers, ads, or tracking</strong>
+                <p>Your Health data is not uploaded, sold, or used for advertising.</p>
+              </div>
+            </div>
           </div>
         </div>
-      </aside>
+      </section>
+
+      <section aria-labelledby="how-title">
+        <div class="section-heading">
+          <span class="eyebrow">Simple from the start</span>
+          <h2 id="how-title">From Apple Health to your personal story.</h2>
+        </div>
+
+        <div class="steps">
+          <article class="card reveal">
+            <div class="step-number">1</div>
+            <h3>Connect Apple Health</h3>
+            <p>
+              Choose which supported categories you want Year In Health to read.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="step-number">2</div>
+            <h3>Explore your progress</h3>
+            <p>
+              Review your goals, achievements, trends, sleep, workouts, and heart data.
+            </p>
+          </article>
+
+          <article class="card reveal">
+            <div class="step-number">3</div>
+            <h3>Share your Year Story</h3>
+            <p>
+              Generate a personalized recap image and share your year with friends.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="support" aria-labelledby="support-title">
+        <div class="section-heading">
+          <span class="eyebrow">Help & support</span>
+          <h2 id="support-title">Questions about Year In Health?</h2>
+        </div>
+
+        <div class="support-grid">
+          <div class="support-card reveal">
+            <h3>Contact the developer</h3>
+            <p>
+              Found an issue, have a feature request, or need help with your data?
+              Send an email and include your iPhone model and iOS version when relevant.
+            </p>
+            <a class="button button-secondary" href="mailto:gal@galaviel.com">
+              gal@galaviel.com
+            </a>
+          </div>
+
+          <div class="faq-list">
+            <details class="reveal">
+              <summary>Is Year In Health free?</summary>
+              <div class="faq-answer">
+                The core Year In Health experience is free. An optional Tip Jar is
+                available for users who would like to support continued development.
+              </div>
+            </details>
+
+            <details class="reveal">
+              <summary>Why do I not see any health data?</summary>
+              <div class="faq-answer">
+                Make sure you have Apple Health data for the selected year and that the
+                required Health permissions are enabled in Settings.
+              </div>
+            </details>
+
+            <details class="reveal">
+              <summary>Does the app upload my Health data?</summary>
+              <div class="faq-answer">
+                No. Health data is processed locally on your device and is not uploaded
+                to a server.
+              </div>
+            </details>
+
+            <details class="reveal">
+              <summary>Does Year In Health provide medical advice?</summary>
+              <div class="faq-answer">
+                No. The app is intended for personal wellness insights and does not
+                diagnose conditions or replace professional medical advice.
+              </div>
+            </details>
+
+            <details class="reveal">
+              <summary>How can I share my recap?</summary>
+              <div class="faq-answer">
+                Use the Year Story feature to generate an image from your data, then
+                save it or share it through the iOS share sheet.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="download-title">
+        <div class="final-cta reveal">
+          <span class="eyebrow">Available now</span>
+          <h2 id="download-title">Your year. Your progress. One clear story.</h2>
+          <p>
+            Download Year In Health and discover what your Apple Health data says about
+            the year you have lived.
+          </p>
+
+          <a
+            class="button button-primary"
+            href="https://apps.apple.com/us/app/year-in-health/id6755406645"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="apple-mark" viewBox="0 0 24 28" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M20.6 14.7c0-3.8 3.1-5.6 3.2-5.7-1.8-2.6-4.6-2.9-5.6-3-2.4-.2-4.7 1.4-5.9 1.4-1.2 0-3.1-1.4-5.1-1.3-2.6 0-5.1 1.5-6.5 3.9-2.8 4.8-.7 11.9 2 15.8 1.3 1.9 2.9 4 5 3.9 2-.1 2.8-1.3 5.2-1.3 2.4 0 3.1 1.3 5.2 1.3 2.2 0 3.6-1.9 4.9-3.8 1.5-2.2 2.1-4.3 2.1-4.4-.1 0-4.5-1.7-4.5-6.8ZM16.6 3.5C17.7 2.2 18.5.4 18.3-1.4c-1.6.1-3.5 1.1-4.7 2.4-1 1.1-1.9 2.9-1.7 4.6 1.8.1 3.6-.9 4.7-2.1Z"
+                transform="translate(0 1.5)"
+              />
+            </svg>
+            Download on the App Store
+          </a>
+        </div>
+      </section>
     </div>
+  </main>
 
-    <footer>
-      <p>© 2025 Gal Aviel — Made with ❤️ for iPhone.</p>
-      <p><a href="privacy.html">Privacy Policy</a></p>
-    </footer>
+  <footer>
+    <div class="container">
+      <div class="footer-row">
+        <p>© 2026 Gal Aviel. Made with care for iPhone.</p>
 
-  </div>
+        <div class="footer-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="mailto:gal@galaviel.com">Support</a>
+          <a
+            href="https://apps.apple.com/us/app/year-in-health/id6755406645"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            App Store
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    // --- 1. Background Particles Animation ---
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let particles = [];
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canvas = document.getElementById("bg-canvas");
+    const ctx = canvas.getContext("2d");
 
-    function resize() {
+    let width = 0;
+    let height = 0;
+    let particles = [];
+    let animationFrame;
+
+    function resizeCanvas() {
+      const devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
       createParticles();
     }
 
     function createParticles() {
-      particles = [];
-      const count = window.innerWidth < 600 ? 30 : 60; // Fewer particles on mobile
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          size: Math.random() * 2 + 0.5,
-          speedY: Math.random() * 0.5 + 0.2,
-          opacity: Math.random() * 0.5 + 0.1
-        });
-      }
+      const count = width < 650 ? 24 : 48;
+
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.8 + 0.45,
+        speed: Math.random() * 0.22 + 0.08,
+        opacity: Math.random() * 0.34 + 0.08
+      }));
     }
 
-    function animate() {
+    function animateParticles() {
       ctx.clearRect(0, 0, width, height);
-      
-      particles.forEach(p => {
-        p.y -= p.speedY; // Move up like floating lights/bubbles
-        if (p.y < 0) p.y = height;
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
-        ctx.fill();
-      });
 
-      requestAnimationFrame(animate);
+      for (const particle of particles) {
+        particle.y -= particle.speed;
+
+        if (particle.y < -10) {
+          particle.y = height + 10;
+          particle.x = Math.random() * width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+        ctx.fill();
+      }
+
+      animationFrame = requestAnimationFrame(animateParticles);
     }
 
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
+    if (!prefersReducedMotion && ctx) {
+      resizeCanvas();
+      animateParticles();
+      window.addEventListener("resize", resizeCanvas, { passive: true });
+    }
 
-    // --- 2. Scroll Reveal Animation ---
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
+    const revealElements = document.querySelectorAll(".reveal");
 
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target); // Only animate once
-        }
-      });
-    }, observerOptions);
+    if ("IntersectionObserver" in window && !prefersReducedMotion) {
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
 
-    document.querySelectorAll('.reveal').forEach(el => {
-      observer.observe(el);
+      revealElements.forEach(element => observer.observe(element));
+    } else {
+      revealElements.forEach(element => element.classList.add("visible"));
+    }
+
+    window.addEventListener("pagehide", () => {
+      if (animationFrame) cancelAnimationFrame(animationFrame);
     });
   </script>
-
 </body>
 </html>
