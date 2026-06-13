@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>הבלוג של גל אביאל – מחשבות על פיתוח, מוצר ו-iOS</title>
+  <meta
+    name="description"
+    content="בלוג אישי על פיתוח תוכנה, בניית אפליקציות iOS, מוצר, ועבודה עצמאית. טיפים, לקחים ומחשבות מהשטח."
+  />
+  <meta name="theme-color" content="#080815" />
+  <link rel="canonical" href="https://galaviel.com/blog.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="גל אביאל" />
+  <meta property="og:title" content="הבלוג של גל אביאל" />
+  <meta property="og:description" content="מחשבות על פיתוח תוכנה, מוצר ובניית אפליקציות iOS." />
+  <meta property="og:url" content="https://galaviel.com/blog.html" />
+  <meta property="og:image" content="https://galaviel.com/logo.png" />
+  <meta property="og:locale" content="he_IL" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="הבלוג של גל אביאל" />
+  <meta name="twitter:description" content="מחשבות על פיתוח תוכנה, מוצר ובניית אפליקציות iOS." />
+  <meta name="twitter:image" content="https://galaviel.com/logo.png" />
+
+  <link rel="icon" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="alternate" type="application/rss+xml" title="הבלוג של גל אביאל" href="https://galaviel.com/rss.xml" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "הבלוג של גל אביאל",
+    "url": "https://galaviel.com/blog.html",
+    "description": "בלוג אישי על פיתוח תוכנה, מוצר ובניית אפליקציות iOS.",
+    "inLanguage": "he",
+    "author": {
+      "@type": "Person",
+      "name": "Gal Aviel",
+      "url": "https://galaviel.com/"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="blog.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">דלג לתוכן</a>
+
+  <div class="nav-wrap">
+    <div class="container">
+      <nav aria-label="ניווט ראשי">
+        <a class="brand" href="index.html" aria-label="גל אביאל — דף הבית">
+          <img src="logo.png" alt="" />
+          <span>גל אביאל</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="index.html">בית</a>
+          <a href="blog.html" aria-current="page">בלוג</a>
+          <a href="mailto:gal@galaviel.com">צור קשר</a>
+        </div>
+
+        <a class="button button-primary button-small" href="rss.xml">RSS</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <div class="container">
+      <header class="blog-header">
+        <span class="eyebrow">הבלוג</span>
+        <h1>מחשבות על <span class="gradient-text">קוד, מוצר ו-iOS.</span></h1>
+        <p>
+          לקחים מהשטח על פיתוח תוכנה, בניית אפליקציות, ועבודה עצמאית.
+          חפשו לפי מילה או סננו לפי תגית.
+        </p>
+      </header>
+
+      <div class="controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+            <path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <input
+            type="search"
+            id="search"
+            placeholder="חיפוש בפוסטים…"
+            aria-label="חיפוש בפוסטים"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="tag-filter" id="tag-filter" role="group" aria-label="סינון לפי תגית"></div>
+      </div>
+
+      <div class="post-list" id="post-list" aria-live="polite"></div>
+
+      <p class="no-results" id="no-results" hidden>לא נמצאו פוסטים שמתאימים לחיפוש.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-row">
+        <p>© 2026 גל אביאל.</p>
+        <div class="footer-links">
+          <a href="index.html">בית</a>
+          <a href="privacy.html">פרטיות</a>
+          <a href="mailto:gal@galaviel.com">צור קשר</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Posts index: edit this list to add new posts. -->
+  <script src="posts.js"></script>
+  <script>
+    (function () {
+      var listEl = document.getElementById("post-list");
+      var noResultsEl = document.getElementById("no-results");
+      var searchEl = document.getElementById("search");
+      var tagFilterEl = document.getElementById("tag-filter");
+
+      var activeTag = null;
+      var query = "";
+
+      // Build the set of unique tags.
+      var allTags = [];
+      POSTS.forEach(function (p) {
+        p.tags.forEach(function (t) {
+          if (allTags.indexOf(t) === -1) allTags.push(t);
+        });
+      });
+      allTags.sort(function (a, b) { return a.localeCompare(b, "he"); });
+
+      function makeTagButton(label, value) {
+        var btn = document.createElement("button");
+        btn.className = "tag-chip";
+        btn.type = "button";
+        btn.textContent = label;
+        btn.setAttribute("aria-pressed", "false");
+        btn.dataset.tag = value === null ? "" : value;
+        btn.addEventListener("click", function () {
+          activeTag = value;
+          updateTagButtons();
+          render();
+        });
+        return btn;
+      }
+
+      tagFilterEl.appendChild(makeTagButton("הכל", null));
+      allTags.forEach(function (t) {
+        tagFilterEl.appendChild(makeTagButton(t, t));
+      });
+
+      function updateTagButtons() {
+        var btns = tagFilterEl.querySelectorAll(".tag-chip");
+        btns.forEach(function (btn) {
+          var val = btn.dataset.tag === "" ? null : btn.dataset.tag;
+          btn.setAttribute("aria-pressed", val === activeTag ? "true" : "false");
+        });
+      }
+
+      function formatDate(iso) {
+        var d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("he-IL", {
+          year: "numeric", month: "long", day: "numeric"
+        });
+      }
+
+      function matches(post) {
+        if (activeTag && post.tags.indexOf(activeTag) === -1) return false;
+        if (!query) return true;
+        var haystack = (post.title + " " + post.excerpt + " " + post.tags.join(" ")).toLowerCase();
+        return query.split(/\s+/).every(function (term) {
+          return haystack.indexOf(term) !== -1;
+        });
+      }
+
+      function render() {
+        var visible = POSTS.filter(matches).sort(function (a, b) {
+          return b.date.localeCompare(a.date);
+        });
+
+        listEl.innerHTML = "";
+        noResultsEl.hidden = visible.length !== 0;
+
+        visible.forEach(function (post) {
+          var a = document.createElement("a");
+          a.className = "post-card";
+          a.href = post.url;
+
+          var meta = document.createElement("div");
+          meta.className = "post-meta";
+          var time = document.createElement("time");
+          time.dateTime = post.date;
+          time.textContent = formatDate(post.date);
+          meta.appendChild(time);
+          if (post.readingTime) {
+            var dot = document.createElement("span");
+            dot.textContent = "•";
+            var rt = document.createElement("span");
+            rt.textContent = post.readingTime + " דק׳ קריאה";
+            meta.appendChild(dot);
+            meta.appendChild(rt);
+          }
+
+          var h2 = document.createElement("h2");
+          h2.textContent = post.title;
+
+          var p = document.createElement("p");
+          p.className = "excerpt";
+          p.textContent = post.excerpt;
+
+          var tags = document.createElement("div");
+          tags.className = "post-tags";
+          post.tags.forEach(function (t) {
+            var span = document.createElement("span");
+            span.textContent = "#" + t;
+            tags.appendChild(span);
+          });
+
+          a.appendChild(meta);
+          a.appendChild(h2);
+          a.appendChild(p);
+          a.appendChild(tags);
+          listEl.appendChild(a);
+        });
+      }
+
+      searchEl.addEventListener("input", function () {
+        query = searchEl.value.trim().toLowerCase();
+        render();
+      });
+
+      updateTagButtons();
+      render();
+    })();
+  </script>
+</body>
+</html>

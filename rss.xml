@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>הבלוג של גל אביאל</title>
+    <link>https://galaviel.com/blog.html</link>
+    <description>מחשבות על פיתוח תוכנה, מוצר ובניית אפליקציות iOS.</description>
+    <language>he</language>
+    <atom:link href="https://galaviel.com/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>ברוכים הבאים לבלוג</title>
+      <link>https://galaviel.com/posts/welcome.html</link>
+      <guid>https://galaviel.com/posts/welcome.html</guid>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 +0000</pubDate>
+      <description>למה פתחתי בלוג אישי, על מה אכתוב כאן, ואיך הבלוג הזה בנוי — הכל בקובץ HTML סטטי אחד.</description>
+    </item>
+
+    <item>
+      <title>לבנות אפליקציית iOS לבד — מה למדתי</title>
+      <link>https://galaviel.com/posts/building-an-ios-app.html</link>
+      <guid>https://galaviel.com/posts/building-an-ios-app.html</guid>
+      <pubDate>Wed, 28 May 2026 00:00:00 +0000</pubDate>
+      <description>מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת.</description>
+    </item>
+
+    <item>
+      <title>SEO בסיסי לאתר סטטי</title>
+      <link>https://galaviel.com/posts/seo-basics.html</link>
+      <guid>https://galaviel.com/posts/seo-basics.html</guid>
+      <pubDate>Sun, 10 May 2026 00:00:00 +0000</pubDate>
+      <description>תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב ומה לא.</description>
+    </item>
+  </channel>
+</rss>
