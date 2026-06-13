@@ -1,0 +1,41 @@
+name: Build blog
+
+# Regenerates the derived blog files (posts/*.html, posts.js, tags/*.html,
+# sitemap.xml, rss.xml) whenever the Markdown sources or the build script change,
+# and commits the result back. This way you never have to run `node build.js`
+# by hand — just edit content/ and push.
+
+on:
+  push:
+    paths:
+      - "content/**"
+      - "build.js"
+      - ".github/workflows/build-blog.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build
+        run: node build.js
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts posts.js tags tags.js sitemap.xml rss.xml
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Rebuild blog (auto-generated)"
+            git push
+          fi

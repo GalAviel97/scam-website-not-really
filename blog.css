@@ -297,7 +297,12 @@ nav {
   box-shadow: 0 20px 46px rgba(0, 0, 0, 0.16);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  cursor: pointer;
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.post-card h2 a:hover {
+  color: var(--gold);
 }
 
 .post-card:hover {
@@ -340,7 +345,8 @@ nav {
   margin-top: 16px;
 }
 
-.post-tags span {
+.post-tags span,
+.post-tags a {
   padding: 5px 11px;
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 999px;
@@ -348,6 +354,12 @@ nav {
   color: #b9c0d0;
   font-size: 12px;
   font-weight: 600;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.post-tags a:hover {
+  border-color: rgba(255, 212, 90, 0.5);
+  color: var(--gold);
 }
 
 .no-results {

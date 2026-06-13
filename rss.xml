@@ -6,29 +6,34 @@
     <description>מחשבות על פיתוח תוכנה, מוצר ובניית אפליקציות iOS.</description>
     <language>he</language>
     <atom:link href="https://galaviel.com/rss.xml" rel="self" type="application/rss+xml" />
-
     <item>
       <title>ברוכים הבאים לבלוג</title>
       <link>https://galaviel.com/posts/welcome.html</link>
       <guid>https://galaviel.com/posts/welcome.html</guid>
-      <pubDate>Sat, 13 Jun 2026 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 GMT</pubDate>
       <description>למה פתחתי בלוג אישי, על מה אכתוב כאן, ואיך הבלוג הזה בנוי — הכל בקובץ HTML סטטי אחד.</description>
+      <category>כללי</category>
+      <category>מאחורי הקלעים</category>
     </item>
-
     <item>
       <title>לבנות אפליקציית iOS לבד — מה למדתי</title>
       <link>https://galaviel.com/posts/building-an-ios-app.html</link>
       <guid>https://galaviel.com/posts/building-an-ios-app.html</guid>
-      <pubDate>Wed, 28 May 2026 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
       <description>מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת.</description>
+      <category>פיתוח</category>
+      <category>iOS</category>
+      <category>מוצר</category>
     </item>
-
     <item>
       <title>SEO בסיסי לאתר סטטי</title>
       <link>https://galaviel.com/posts/seo-basics.html</link>
       <guid>https://galaviel.com/posts/seo-basics.html</guid>
-      <pubDate>Sun, 10 May 2026 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
       <description>תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב ומה לא.</description>
+      <category>SEO</category>
+      <category>ווב</category>
+      <category>פיתוח</category>
     </item>
   </channel>
 </rss>

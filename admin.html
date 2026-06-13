@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>עורך פוסטים – גל אביאל</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="logo.png" />
+  <link rel="stylesheet" href="blog.css" />
+  <style>
+    .admin-wrap { width: min(calc(100% - 40px), 1100px); margin: 0 auto; padding: 30px 0 60px; }
+    .gate { max-width: 420px; margin: 60px auto; text-align: center; }
+    .gate input { width: 100%; min-height: 52px; margin: 18px 0 14px; padding: 0 18px;
+      border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.05);
+      color: var(--text); font-size: 16px; font-family: inherit; outline: none; }
+    .gate .note { margin-top: 16px; color: #8f97aa; font-size: 13px; line-height: 1.6; }
+    .editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 13px; font-weight: 650; }
+    .field input, .field textarea {
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+      background: rgba(255,255,255,0.05); color: var(--text); font-size: 15px; font-family: inherit;
+      outline: none; transition: border-color 180ms ease; }
+    .field input:focus, .field textarea:focus { border-color: rgba(255,212,90,0.5); }
+    .field textarea { min-height: 320px; resize: vertical; line-height: 1.6;
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 14px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .preview-pane { padding: 24px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      background: var(--card); min-height: 320px; }
+    .preview-pane .article-body { margin-top: 0; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
+    .output { margin-top: 24px; }
+    .output textarea { width: 100%; min-height: 260px; padding: 16px; border: 1px solid var(--border);
+      border-radius: 14px; background: rgba(0,0,0,0.35); color: #e4e7f0;
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13px; line-height: 1.6;
+      outline: none; }
+    .hint { padding: 16px 18px; margin-bottom: 22px; border: 1px solid rgba(255,212,90,0.25);
+      border-radius: 14px; background: rgba(255,212,90,0.06); color: #f0e2bd; font-size: 14px; line-height: 1.65; }
+    @media (max-width: 860px) { .editor-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <div class="container">
+      <nav aria-label="ניווט ראשי">
+        <a class="brand" href="index.html"><img src="logo.png" alt="" /><span>גל אביאל</span></a>
+        <div class="nav-links">
+          <a href="index.html">בית</a>
+          <a href="blog.html">בלוג</a>
+        </div>
+        <a class="button button-primary button-small" href="blog.html">לבלוג</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Passphrase gate -->
+  <div class="gate" id="gate">
+    <span class="eyebrow">אזור כתיבה</span>
+    <h1 style="font-size:32px;letter-spacing:-0.03em;">עורך הפוסטים</h1>
+    <input type="password" id="pass" placeholder="סיסמה" autocomplete="current-password" />
+    <button class="button button-primary" id="unlock" style="width:100%;">כניסה</button>
+    <p class="note" id="gate-error" hidden style="color:var(--coral);">סיסמה שגויה.</p>
+    <p class="note">
+      <strong>שימו לב:</strong> זהו מנעול נוחות בלבד שרץ בדפדפן — הוא מונע מסקרנים,
+      אבל אינו אבטחה אמיתית. ההגנה האמיתית היא שהאתר סטטי: פרסום פוסט דורש
+      commit ל-git, וזה פתוח רק למי שיש לו גישה ל-repo.
+    </p>
+  </div>
+
+  <!-- Editor -->
+  <main class="admin-wrap" id="editor" hidden>
+    <div class="hint">
+      כתבו את הפוסט, לחצו <strong>צור קובץ</strong>, הורידו את ה-<code>.md</code> ושמרו אותו
+      בתיקיית <code>content/</code>. אחר כך הריצו <code>node build.js</code> (או דחפו ל-git
+      וה-GitHub Action יבנה לבד). העורך לא שומר ישירות לאתר — בכוונה.
+    </div>
+
+    <div class="editor-grid">
+      <div>
+        <div class="field">
+          <label for="f-title">כותרת</label>
+          <input type="text" id="f-title" placeholder="כותרת הפוסט" />
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="f-slug">slug (שם הקובץ, באנגלית)</label>
+            <input type="text" id="f-slug" placeholder="my-first-post" />
+          </div>
+          <div class="field">
+            <label for="f-date">תאריך</label>
+            <input type="date" id="f-date" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="f-tags">תגיות (מופרדות בפסיק)</label>
+            <input type="text" id="f-tags" placeholder="פיתוח, iOS" />
+          </div>
+          <div class="field">
+            <label for="f-rt">דקות קריאה (אופציונלי)</label>
+            <input type="number" id="f-rt" min="1" placeholder="אוטומטי" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-excerpt">תקציר</label>
+          <input type="text" id="f-excerpt" placeholder="משפט קצר שמתאר את הפוסט" />
+        </div>
+        <div class="field">
+          <label for="f-body">גוף הפוסט (Markdown)</label>
+          <textarea id="f-body" placeholder="## כותרת משנה&#10;&#10;פסקה רגילה. אפשר **מודגש**, *נטוי*, `קוד`, ו[קישור](https://example.com).&#10;&#10;- פריט&#10;- פריט&#10;&#10;> ציטוט"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <label class="field" style="display:block;color:var(--muted);font-size:13px;font-weight:650;">תצוגה מקדימה</label>
+        <div class="preview-pane">
+          <h1 id="pv-title" style="font-size:28px;letter-spacing:-0.03em;margin-bottom:10px;"></h1>
+          <div class="post-tags" id="pv-tags" style="margin-bottom:18px;"></div>
+          <div class="article-body" id="pv-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="button button-primary" id="gen">צור קובץ .md</button>
+      <button class="button button-secondary" id="copy">העתק ללוח</button>
+      <button class="button button-secondary" id="download">הורד .md</button>
+    </div>
+
+    <div class="output">
+      <label class="field" style="display:block;color:var(--muted);font-size:13px;font-weight:650;">תוכן הקובץ</label>
+      <textarea id="out" readonly placeholder="כאן יופיע תוכן הקובץ אחרי לחיצה על 'צור קובץ'"></textarea>
+    </div>
+  </main>
+
+  <script>
+    /*
+     * SECURITY NOTE: this passphrase check runs entirely in the browser and is
+     * NOT real authentication — anyone can read the source. It only keeps casual
+     * visitors out of the editor UI. Real protection comes from the static-site
+     * model: publishing requires a git commit. Change PASS_HASH below to set your
+     * own passphrase (it is the SHA-256 hex of the passphrase).
+     *
+     * Default passphrase: "gal-blog" — change it!
+     */
+    var PASS_HASH = "33ec8615870cb987e265c7280e4f49e5268e10ea1c48be789de884d6f5964f5b";
+
+    async function sha256Hex(str) {
+      var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf))
+        .map(function (b) { return b.toString(16).padStart(2, "0"); })
+        .join("");
+    }
+
+    var gate = document.getElementById("gate");
+    var editor = document.getElementById("editor");
+    var passEl = document.getElementById("pass");
+    var gateError = document.getElementById("gate-error");
+
+    async function tryUnlock() {
+      var hex = await sha256Hex(passEl.value);
+      if (hex === PASS_HASH) {
+        gate.hidden = true;
+        editor.hidden = false;
+        document.getElementById("f-date").value = new Date().toISOString().slice(0, 10);
+      } else {
+        gateError.hidden = false;
+      }
+    }
+
+    document.getElementById("unlock").addEventListener("click", tryUnlock);
+    passEl.addEventListener("keydown", function (e) { if (e.key === "Enter") tryUnlock(); });
+
+    // --- Markdown preview (same subset as build.js) ---
+    function escapeHtml(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+    function renderInline(text) {
+      var codeSpans = [];
+      text = text.replace(/`([^`]+)`/g, function (_, c) { codeSpans.push(c); return " \uE000" + (codeSpans.length - 1) + "\uE000 "; });
+      text = escapeHtml(text);
+      text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_, l, u) { return '<a href="' + escapeHtml(u) + '">' + l + "</a>"; });
+      text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      text = text.replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>");
+      text = text.replace(/\uE000(\d+)\uE000/g, function (_, i) { return "<code>" + escapeHtml(codeSpans[+i]) + "</code>"; });
+      return text;
+    }
+    function renderMarkdown(md) {
+      var lines = md.replace(/\r\n/g, "\n").split("\n"), out = [], i = 0;
+      function list(tag, items) { out.push("<" + tag + ">"); items.forEach(function (it) { out.push("<li>" + renderInline(it) + "</li>"); }); out.push("</" + tag + ">"); }
+      while (i < lines.length) {
+        var line = lines[i];
+        if (/^```/.test(line)) { var c = []; i++; while (i < lines.length && !/^```/.test(lines[i])) { c.push(lines[i]); i++; } i++; out.push("<pre><code>" + escapeHtml(c.join("\n")) + "</code></pre>"); continue; }
+        if (/^>\s?/.test(line)) { var q = []; while (i < lines.length && /^>\s?/.test(lines[i])) { q.push(lines[i].replace(/^>\s?/, "")); i++; } out.push("<blockquote><p>" + renderInline(q.join(" ")) + "</p></blockquote>"); continue; }
+        var h = line.match(/^(#{2,4})\s+(.*)$/);
+        if (h) { out.push("<h" + h[1].length + ">" + renderInline(h[2]) + "</h" + h[1].length + ">"); i++; continue; }
+        if (/^[-*]\s+/.test(line)) { var u = []; while (i < lines.length && /^[-*]\s+/.test(lines[i])) { u.push(lines[i].replace(/^[-*]\s+/, "")); i++; } list("ul", u); continue; }
+        if (/^\d+\.\s+/.test(line)) { var o = []; while (i < lines.length && /^\d+\.\s+/.test(lines[i])) { o.push(lines[i].replace(/^\d+\.\s+/, "")); i++; } list("ol", o); continue; }
+        if (!line.trim()) { i++; continue; }
+        var p = []; while (i < lines.length && lines[i].trim() && !/^```/.test(lines[i]) && !/^>\s?/.test(lines[i]) && !/^#{2,4}\s+/.test(lines[i]) && !/^[-*]\s+/.test(lines[i]) && !/^\d+\.\s+/.test(lines[i])) { p.push(lines[i]); i++; }
+        out.push("<p>" + renderInline(p.join(" ")) + "</p>");
+      }
+      return out.join("\n");
+    }
+
+    function tagsArray() {
+      return document.getElementById("f-tags").value.split(",").map(function (t) { return t.trim(); }).filter(Boolean);
+    }
+
+    function updatePreview() {
+      document.getElementById("pv-title").textContent = document.getElementById("f-title").value || "כותרת הפוסט";
+      var tagsEl = document.getElementById("pv-tags");
+      tagsEl.innerHTML = "";
+      tagsArray().forEach(function (t) { var s = document.createElement("span"); s.textContent = "#" + t; tagsEl.appendChild(s); });
+      document.getElementById("pv-body").innerHTML = renderMarkdown(document.getElementById("f-body").value);
+    }
+
+    ["f-title", "f-tags", "f-body"].forEach(function (id) {
+      document.getElementById(id).addEventListener("input", updatePreview);
+    });
+
+    function buildFile() {
+      var title = document.getElementById("f-title").value.trim();
+      var date = document.getElementById("f-date").value;
+      var tags = tagsArray().join(", ");
+      var excerpt = document.getElementById("f-excerpt").value.trim();
+      var rt = document.getElementById("f-rt").value.trim();
+      var body = document.getElementById("f-body").value.trim();
+      var fm = "---\ntitle: " + title + "\ndate: " + date + "\ntags: " + tags + "\nexcerpt: " + excerpt + "\n";
+      if (rt) fm += "readingTime: " + rt + "\n";
+      fm += "---\n\n" + body + "\n";
+      return fm;
+    }
+
+    document.getElementById("gen").addEventListener("click", function () {
+      document.getElementById("out").value = buildFile();
+    });
+    document.getElementById("copy").addEventListener("click", function () {
+      var out = document.getElementById("out");
+      if (!out.value) out.value = buildFile();
+      out.select();
+      navigator.clipboard.writeText(out.value);
+    });
+    document.getElementById("download").addEventListener("click", function () {
+      var content = buildFile();
+      var slug = document.getElementById("f-slug").value.trim() || "untitled";
+      var blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = slug + ".md";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  </script>
+</body>
+</html>

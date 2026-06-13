@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>SEO בסיסי לאתר סטטי – גל אביאל</title>
-  <meta
-    name="description"
-    content="תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב לקידום אתר סטטי ומה פחות."
-  />
+  <meta name="description" content="תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב ומה לא." />
   <meta name="theme-color" content="#080815" />
   <meta name="author" content="Gal Aviel" />
   <link rel="canonical" href="https://galaviel.com/posts/seo-basics.html" />
@@ -16,17 +13,19 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="גל אביאל" />
   <meta property="og:title" content="SEO בסיסי לאתר סטטי" />
-  <meta property="og:description" content="meta, Open Graph, JSON-LD, sitemap ו-RSS — מה חשוב." />
+  <meta property="og:description" content="תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב ומה לא." />
   <meta property="og:url" content="https://galaviel.com/posts/seo-basics.html" />
   <meta property="og:image" content="https://galaviel.com/logo.png" />
   <meta property="og:locale" content="he_IL" />
   <meta property="article:published_time" content="2026-05-10" />
   <meta property="article:author" content="Gal Aviel" />
   <meta property="article:tag" content="SEO" />
+  <meta property="article:tag" content="ווב" />
+  <meta property="article:tag" content="פיתוח" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="SEO בסיסי לאתר סטטי" />
-  <meta name="twitter:description" content="meta, Open Graph, JSON-LD, sitemap ו-RSS — מה חשוב." />
+  <meta name="twitter:description" content="תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב ומה לא." />
   <meta name="twitter:image" content="https://galaviel.com/logo.png" />
 
   <link rel="icon" href="../logo.png" />
@@ -38,7 +37,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "SEO בסיסי לאתר סטטי",
-    "description": "meta, Open Graph, נתונים מובנים, sitemap ו-RSS — מה חשוב לקידום אתר סטטי.",
+    "description": "תגיות meta, Open Graph, נתונים מובנים (JSON-LD), sitemap ו-RSS — מה באמת חשוב ומה לא.",
     "datePublished": "2026-05-10",
     "dateModified": "2026-05-10",
     "inLanguage": "he",
@@ -46,8 +45,15 @@
     "url": "https://galaviel.com/posts/seo-basics.html",
     "mainEntityOfPage": "https://galaviel.com/posts/seo-basics.html",
     "keywords": "SEO, ווב, פיתוח",
-    "author": { "@type": "Person", "name": "Gal Aviel", "url": "https://galaviel.com/" },
-    "publisher": { "@type": "Person", "name": "Gal Aviel" }
+    "author": {
+      "@type": "Person",
+      "name": "Gal Aviel",
+      "url": "https://galaviel.com/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Gal Aviel"
+    }
   }
   </script>
 
@@ -98,57 +104,24 @@
       </header>
 
       <div class="article-body">
-        <p>
-          לאתר סטטי אין צורך בתוספי SEO כבדים. כמה החלטות נכונות ב-HTML עצמו עושות
-          את רוב העבודה. הנה הרשימה שאני עובר עליה לכל עמוד.
-        </p>
-
+        <p>לאתר סטטי אין צורך בתוספי SEO כבדים. כמה החלטות נכונות ב-HTML עצמו עושות את רוב העבודה. הנה הרשימה שאני עובר עליה לכל עמוד.</p>
         <h2>1. כותרת ותיאור</h2>
-        <p>
-          כל עמוד צריך <code>&lt;title&gt;</code> ייחודי ו-<code>meta description</code>
-          קצר (כ-150 תווים) שמתאר במדויק את התוכן. אלה מה שגוגל מציג בתוצאות החיפוש,
-          אז כדאי שיהיו מזמינים.
-        </p>
-
+        <p>כל עמוד צריך <code>title</code> ייחודי ו-<code>meta description</code> קצר (כ-150 תווים) שמתאר במדויק את התוכן. אלה מה שגוגל מציג בתוצאות החיפוש, אז כדאי שיהיו מזמינים.</p>
         <h2>2. Open Graph ו-Twitter Cards</h2>
-        <p>
-          כשמישהו משתף קישור בוואטסאפ, פייסבוק או X — תגיות
-          <code>og:title</code>, <code>og:description</code> ו-<code>og:image</code>
-          קובעות איך התצוגה המקדימה תיראה. בלעדיהן הקישור נראה עירום.
-        </p>
-
+        <p>כשמישהו משתף קישור בוואטסאפ, פייסבוק או X — תגיות <code>og:title</code>, <code>og:description</code> ו-<code>og:image</code> קובעות איך התצוגה המקדימה תיראה. בלעדיהן הקישור נראה עירום.</p>
         <h2>3. נתונים מובנים (JSON-LD)</h2>
-        <p>
-          בלוק <code>application/ld+json</code> עם סכמת <code>BlogPosting</code> עוזר
-          למנועי חיפוש להבין שמדובר במאמר, מי כתב אותו ומתי. זה מה שמאפשר תוצאות
-          עשירות (rich results).
-        </p>
+        <p>בלוק <code>application/ld+json</code> עם סכמת <code>BlogPosting</code> עוזר למנועי חיפוש להבין שמדובר במאמר, מי כתב אותו ומתי. זה מה שמאפשר תוצאות עשירות (rich results).</p>
         <pre><code>{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "כותרת הפוסט",
-  "datePublished": "2026-05-10",
-  "author": { "@type": "Person", "name": "Gal Aviel" }
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;כותרת הפוסט&quot;,
+  &quot;datePublished&quot;: &quot;2026-05-10&quot;
 }</code></pre>
-
         <h2>4. Sitemap ו-robots.txt</h2>
-        <p>
-          קובץ <code>sitemap.xml</code> מפרט את כל העמודים שלכם כדי שגוגל ימצא אותם
-          מהר. <code>robots.txt</code> מצביע אל ה-sitemap ומגדיר מה מותר לסרוק.
-          שניהם קבצים פשוטים בשורש האתר.
-        </p>
-
+        <p>קובץ <code>sitemap.xml</code> מפרט את כל העמודים שלכם כדי שגוגל ימצא אותם מהר. <code>robots.txt</code> מצביע אל ה-sitemap ומגדיר מה מותר לסרוק. שניהם קבצים פשוטים בשורש האתר.</p>
         <h2>5. RSS — עדיין רלוונטי</h2>
-        <p>
-          הזנת <code>RSS</code> מאפשרת לקוראים לעקוב אחרי הבלוג בקוראי תוכן. זה גם
-          ערוץ הפצה שאתם שולטים בו במלואו, בלי תלות באלגוריתם של אף רשת חברתית.
-        </p>
-
-        <blockquote>
-          הכלל הפשוט: כתבו תוכן טוב, ותנו למנועי החיפוש את ההקשר המינימלי שהם צריכים
-          כדי להבין אותו. כל השאר הוא ליטוש.
-        </blockquote>
-
+        <p>הזנת <code>RSS</code> מאפשרת לקוראים לעקוב אחרי הבלוג בקוראי תוכן. זה גם ערוץ הפצה שאתם שולטים בו במלואו, בלי תלות באלגוריתם של אף רשת חברתית.</p>
+        <blockquote><p>הכלל הפשוט: כתבו תוכן טוב, ותנו למנועי החיפוש את ההקשר המינימלי שהם צריכים כדי להבין אותו. כל השאר הוא ליטוש.</p></blockquote>
         <h2>מה פחות חשוב</h2>
         <ul>
           <li>צפיפות מילות מפתח — מיושן, ולפעמים מזיק.</li>
@@ -158,7 +131,7 @@
       </div>
 
       <footer class="article-footer">
-        <p>נכתב על ידי גל אביאל. שאלות על SEO? <a href="mailto:gal@galaviel.com">כתבו לי</a>.</p>
+        <p>נכתב על ידי גל אביאל. יש לכם מחשבה או תיקון? <a href="mailto:gal@galaviel.com">כתבו לי</a>.</p>
       </footer>
     </article>
   </main>

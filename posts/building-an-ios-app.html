@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>לבנות אפליקציית iOS לבד — מה למדתי – גל אביאל</title>
-  <meta
-    name="description"
-    content="מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת בבניית אפליקציה עצמאית."
-  />
+  <meta name="description" content="מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת." />
   <meta name="theme-color" content="#080815" />
   <meta name="author" content="Gal Aviel" />
   <link rel="canonical" href="https://galaviel.com/posts/building-an-ios-app.html" />
@@ -16,17 +13,19 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="גל אביאל" />
   <meta property="og:title" content="לבנות אפליקציית iOS לבד — מה למדתי" />
-  <meta property="og:description" content="מרעיון ועד App Store: SwiftUI, פרטיות ופשטות." />
+  <meta property="og:description" content="מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת." />
   <meta property="og:url" content="https://galaviel.com/posts/building-an-ios-app.html" />
   <meta property="og:image" content="https://galaviel.com/logo.png" />
   <meta property="og:locale" content="he_IL" />
   <meta property="article:published_time" content="2026-05-28" />
   <meta property="article:author" content="Gal Aviel" />
+  <meta property="article:tag" content="פיתוח" />
   <meta property="article:tag" content="iOS" />
+  <meta property="article:tag" content="מוצר" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="לבנות אפליקציית iOS לבד — מה למדתי" />
-  <meta name="twitter:description" content="מרעיון ועד App Store: SwiftUI, פרטיות ופשטות." />
+  <meta name="twitter:description" content="מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת." />
   <meta name="twitter:image" content="https://galaviel.com/logo.png" />
 
   <link rel="icon" href="../logo.png" />
@@ -38,7 +37,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "לבנות אפליקציית iOS לבד — מה למדתי",
-    "description": "מרעיון ועד App Store: SwiftUI, פרטיות, עיבוד מקומי ופשטות.",
+    "description": "מרעיון ועד App Store: על SwiftUI, פרטיות, עיבוד מקומי של נתונים, ולמה פשטות מנצחת.",
     "datePublished": "2026-05-28",
     "dateModified": "2026-05-28",
     "inLanguage": "he",
@@ -46,8 +45,15 @@
     "url": "https://galaviel.com/posts/building-an-ios-app.html",
     "mainEntityOfPage": "https://galaviel.com/posts/building-an-ios-app.html",
     "keywords": "פיתוח, iOS, מוצר",
-    "author": { "@type": "Person", "name": "Gal Aviel", "url": "https://galaviel.com/" },
-    "publisher": { "@type": "Person", "name": "Gal Aviel" }
+    "author": {
+      "@type": "Person",
+      "name": "Gal Aviel",
+      "url": "https://galaviel.com/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Gal Aviel"
+    }
   }
   </script>
 
@@ -98,57 +104,27 @@
       </header>
 
       <div class="article-body">
-        <p>
-          לפני כמה חודשים שחררתי אפליקציית iOS שבניתי לבד, מההתחלה ועד ה-App Store.
-          בלי צוות, בלי משקיע, בלי לוח זמנים חיצוני. הנה הלקחים שהכי השפיעו עליי.
-        </p>
-
+        <p>לפני כמה חודשים שחררתי אפליקציית iOS שבניתי לבד, מההתחלה ועד ה-App Store. בלי צוות, בלי משקיע, בלי לוח זמנים חיצוני. הנה הלקחים שהכי השפיעו עליי.</p>
         <h2>1. תתחילו מהדבר הקטן ביותר שעובד</h2>
-        <p>
-          הרעיון המקורי היה גדול בהרבה ממה ששוחרר בסוף. במקום לבנות הכל, בחרתי
-          תכונה אחת שאני בעצמי הייתי משתמש בה כל יום, ובניתי רק אותה היטב. כל השאר
-          חיכה לגרסה הבאה.
-        </p>
-
+        <p>הרעיון המקורי היה גדול בהרבה ממה ששוחרר בסוף. במקום לבנות הכל, בחרתי תכונה אחת שאני בעצמי הייתי משתמש בה כל יום, ובניתי רק אותה היטב. כל השאר חיכה לגרסה הבאה.</p>
         <h2>2. SwiftUI נהדר — עד שהוא לא</h2>
-        <p>
-          ל-90% מהמסכים, <code>SwiftUI</code> הוא תענוג: מהיר לכתיבה, קל לתחזוקה,
-          ותצוגה מקדימה חיה. ל-10% הקשים (אנימציות מורכבות, ביצועים ברשימות ענק)
-          לפעמים צריך לרדת ל-UIKit. זה בסדר. אל תילחמו בפריימוורק.
-        </p>
-
+        <p>ל-90% מהמסכים, <code>SwiftUI</code> הוא תענוג: מהיר לכתיבה, קל לתחזוקה, ותצוגה מקדימה חיה. ל-10% הקשים (אנימציות מורכבות, ביצועים ברשימות ענק) לפעמים צריך לרדת ל-UIKit. זה בסדר. אל תילחמו בפריימוורק.</p>
         <h2>3. פרטיות היא תכונה, לא נטל</h2>
-        <p>
-          בחרתי לעבד את כל נתוני המשתמש מקומית על המכשיר — בלי שרת, בלי חשבון, בלי
-          מעקב. זה אומר פחות תשתית לתחזק, פחות חששות אבטחה, ומסר שיווקי ברור.
-        </p>
-        <blockquote>
-          כשאין שרת שמאחסן נתונים, אין דליפה אפשרית. ההחלטה הכי בטוחה היא לא לאסוף
-          מלכתחילה.
-        </blockquote>
-
+        <p>בחרתי לעבד את כל נתוני המשתמש מקומית על המכשיר — בלי שרת, בלי חשבון, בלי מעקב. זה אומר פחות תשתית לתחזק, פחות חששות אבטחה, ומסר שיווקי ברור.</p>
+        <blockquote><p>כשאין שרת שמאחסן נתונים, אין דליפה אפשרית. ההחלטה הכי בטוחה היא לא לאסוף מלכתחילה.</p></blockquote>
         <h2>4. תשקיעו ב-onboarding</h2>
-        <p>
-          רוב המשתמשים מחליטים בשלושים השניות הראשונות אם להישאר. מסך פתיחה ברור,
-          שמבקש רק את ההרשאות שבאמת צריך ובדיוק ברגע הנכון, שינה לי את אחוזי
-          ההמרה יותר מכל תכונה אחרת.
-        </p>
-
+        <p>רוב המשתמשים מחליטים בשלושים השניות הראשונות אם להישאר. מסך פתיחה ברור, שמבקש רק את ההרשאות שבאמת צריך ובדיוק ברגע הנכון, שינה לי את אחוזי ההמרה יותר מכל תכונה אחרת.</p>
         <h2>5. השחרור הוא ההתחלה, לא הסוף</h2>
         <ul>
           <li>קראו כל ביקורת ב-App Store — שם נמצאות הבקשות הכי כנות.</li>
           <li>תקנו באגים לפני שאתם מוסיפים תכונות.</li>
           <li>גרסה קטנה כל שבועיים עדיפה על גרסה ענקית כל חצי שנה.</li>
         </ul>
-
-        <p>
-          אם אתם שוקלים לבנות משהו לבד — פשוט תתחילו. הגרסה הראשונה תהיה מביכה,
-          וזה בדיוק הסימן שאתם בכיוון הנכון.
-        </p>
+        <p>אם אתם שוקלים לבנות משהו לבד — פשוט תתחילו. הגרסה הראשונה תהיה מביכה, וזה בדיוק הסימן שאתם בכיוון הנכון.</p>
       </div>
 
       <footer class="article-footer">
-        <p>נכתב על ידי גל אביאל. בונים אפליקציה ורוצים להתייעץ? <a href="mailto:gal@galaviel.com">כתבו לי</a>.</p>
+        <p>נכתב על ידי גל אביאל. יש לכם מחשבה או תיקון? <a href="mailto:gal@galaviel.com">כתבו לי</a>.</p>
       </footer>
     </article>
   </main>
